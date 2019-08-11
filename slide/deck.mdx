@@ -187,20 +187,6 @@ $("a").addClass("o").show("slow")
 
 ---
 
-<Header>テスト</Header>
-
-- end to end
-- integration
-- snapshot
-- unit
-- static
-
----
-
-<Header>テスト（演習）</Header>
-
----
-
 <Header>エラーハンドリング</Header>
 
 ```
@@ -225,6 +211,10 @@ throw New MyError("Oops...");
 - caniuse
 
 ---
+
+### Arrow function
+
+---
 # Runtime
 
 - node
@@ -232,21 +222,73 @@ throw New MyError("Oops...");
 
 ---
 
-<Header>Async性質</Header>
+<Header>Single Thread</Header>
+
+- one call stack
+- one memory heap
 
 ---
 
-### Arrow function
+<Header>Async & Sync</Header>
+
+- Javascript Engineとのインターフェースはasync, sync APIがある
+- `window.alert()`はsync, `window.setTimeout()`はasync
+
+
+---
+
+```
+window.addEventListener("click", function() {
+	for (;;) {}
+});
+```
+
+---
+
+<Header>Async, defer</Header>
+
+<script src="somejs"></script>
+<script src="somejs" async></script>
+<script src="somejs" defer></script>
 
 ---
 
 ## Event loop
 
-- single thread
+---
+
+<Header>Click Event</Header>
+
+```
+<button id="clickMe">Click Me</button>
+```
+
+```
+document.querySelector("#clickMe").onclick = function(e) {}
+
+document.querySelector("#clickMe").addEventListener("click", function(e) {})
+```
 
 ---
 
-## event api
+<Header>Event Propagation</Header>
+
+```
+ ----------------------------
+|            #o              |
+|     ----------------       |
+|    |                |      |
+|    |       #i       |      |
+|    |                |      |
+|     ----------------       |
+ ----------------------------     
+```
+
+---
+
+<Header>Event Propagation（演習）</Header>
+
+https://jsbin.com/zamixot/edit?html,js,console,output
 
 ---
 
@@ -257,14 +299,29 @@ throw New MyError("Oops...");
 ---
 
 
-### Fetch API
+### Fetch API（演習）
 
 ---
 
+<Header>テスト</Header>
 
-# Modern JavaScript
+- end to end
+- integration
+- snapshot
+- unit
+- static
 
 ---
 
-npm & security
+<Header>テスト（演習）</Header>
 
+
+---
+
+<Header>npmとセキュリティー</Header>
+
+
+---
+
+Links
+ - https://dev.to/steelvoltage/if-javascript-is-single-threaded-how-is-it-asynchronous-56gd
