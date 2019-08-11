@@ -17,6 +17,19 @@ server.get('/timeout', async (req, res) => {
   	})
 })
 
+// Add custom routes before JSON Server router
+server.get('/retryme', (req, res) => {
+  if (Math.random() < 0.2) {
+   res.status(200).jsonp({
+    	message: "Nice try. You are lucky!"
+    });
+  } else {
+  	res.status(500).jsonp({
+    	error: "Server Internal Error. Please retry again."
+  	});
+  }
+})
+
 // To handle POST, PUT and PATCH you need to use a body-parser
 // You can use the one used by JSON Server
 server.use(jsonServer.bodyParser)
