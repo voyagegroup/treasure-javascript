@@ -1,49 +1,193 @@
+import {
+	Split,
+	SplitRight,
+	Image,
+} from 'mdx-deck'
+
+import highlight from '@mdx-deck/themes/syntax-highlighter'
+import { swiss as mdxTheme } from '@mdx-deck/themes'
+import provider from './component/provider'
+import Header from './component/header'
+
+export const theme = {
+  ...highlight,
+  ...provider,
+  ...mdxTheme,
+  css: {
+    padding: "0 10%"
+  },
+  font: 'Nunito, sans-serif',
+  googleFont: 'https://fonts.googleapis.com/css?family=Nunito:300,300i,700',
+  code: {
+  },
+  pre: {
+    fontSize: `28px`,
+    lineHeight: `42px`,
+    color: `#fff !important`
+  },
+  heading: {
+    position: `relative`,
+    zIndex: `1000`,
+    textTransform: `none`
+  },
+}
+
 # JavaScript
 
 ---
 
-# History
+## JavaScript言語
 
-1989: HTTP client <-> server(Tim Berners-Lee)
-1995: JavaScript(Brendan Eich)
-1999: Ajax(Microsoft), JSON(Douglas Crockford)
-2004: Gmail, Google Maps(Google)
-2006: jQuery(John Resig)
-2009: node.js(Ryan Dahl)
-2010: AngularJS(Google), npm
-2012: bower(Twitter)
-2013: React(Jordan Walke, facebook)
-2014: Vue.js(Evan You), 6to5
-2015: ECMAScript 6, 6to5 + esnext, redux
----
-
-## JavaScript as programming language
-
----
- 
-## ES6 
-
-- caniuse
----
-
-### Arrow function
+- 実行環境（ブラウザ、
 
 ---
 
-## JavaScript common gotcha
+## JavaScript言語の評判
 
-?
+---
+# JavaScriptの歴史
 
 ---
 
-### Avoid surprise, avoid gotcha
+<Header>1989: HTTP works !</Header>
+
+<SplitRight>
+
+I just had to take the hypertext idea and connect it to the Transmission Control Protocol and domain name system ideas and—ta-da! —the World Wide Web" - Tim Berners-Lee
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Sir_Tim_Berners-Lee_%28cropped%29.jpg/440px-Sir_Tim_Berners-Lee_%28cropped%29.jpg" />
+
+</SplitRight>
+
+
+---
+
+<Header>1995: JavaScript</Header>
+
+<SplitRight>
+
+"22 years ago in May I did 10 days of hard work. I didn’t sleep much." - Brandon Eich
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Brendan_Eich_Mozilla_Foundation_official_photo.jpg/440px-Brendan_Eich_Mozilla_Foundation_official_photo.jpg" height="80vh" />
+
+</SplitRight>
+
+[thenewstack.io](https://thenewstack.io/brendan-eich-on-creating-javascript-in-10-days-and-what-hed-do-differently-today/)
+
+---
+
+<Header>1999: Ajax</Header>
+
+<Split>
+
+"It appeared as XMLHTTP in the second version of the MSXML library, which shipped with Internet Explorer 5.0 in March 1999 - wikipedia"
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Jesse_James_Garrett_2016.jpg/400px-Jesse_James_Garrett_2016.jpg" />
+
+</Split>
+
+[A New Approach to Web Applications](https://immagic.com/eLibrary/ARCHIVES/GENERAL//ADTVPATH/A050218G.pdf)
+
+---
+
+<Header>1999: JSON</Header>
+
+<Split>
+
+I do not claim to have invented JSON. It already existed in nature. - Douglas Crockford
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Douglas_Crockford%2C_February_2013.jpg/400px-Douglas_Crockford%2C_February_2013.jpg" />
+
+</Split>
+
+---
+<Header>2004, 2005: AJAX</Header>
+
+<Split>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/GoogleMaps_logo.svg/140px-GoogleMaps_logo.svg.png" />
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Gmail_Icon.svg/200px-Gmail_Icon.svg.png" />
+
+</Split>
+
+---
+
+<Header>2006: jQuery</Header>
+
+<Split>
+	
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/Jresig.png" />
+
+```
+$("a").addClass("o").show("slow")
+```
+
+</Split>
+
+---
+
+<Header>2008: V8 & Chrome</Header>
+
+<Split>
+	
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/V8_JavaScript_engine_logo_2.svg/440px-V8_JavaScript_engine_logo_2.svg.png" />
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/128px-Google_Chrome_icon_%28September_2014%29.svg.png" />
+
+</Split>
+
+---
+
+<Header>2010: AngularJS(Google)</Header>
+
+---
+
+<Header>2010: npm</Header>
+
+---
+
+<Header>2013: React(Jordan Walke, facebook)</Header>
+
+---
+
+<Header>2014: Vue.js, babel(6to5)</Header>
+
+---
+
+<Header>2015: ECMAScript 6, redux</Header>
+
+---
+
+<Header>2019: ??? </Header>
+
+---
+
+<Header>2019: Treasureのフロント講義</Header>
+
+<Split>
+
+<img src="https://user-images.githubusercontent.com/5494874/62817336-c60cc380-bb6f-11e9-8d8d-d5405e38cae0.jpg" width="400px" />
+
+**JavaScriptを理解する人を30人増やす**
+
+</Split>
+
+---
+
+<Header>JavaScript common gotcha</Header>
+
+
+---
+
+<Header>Avoid surprise, avoid gotcha</Header>
 
 - use `===` over `==`
 - const, let, var
 
 ---
 
-## testing
+<Header>テスト</Header>
 
 - end to end
 - integration
@@ -53,7 +197,11 @@
 
 ---
 
-## error handling
+<Header>テスト（演習）</Header>
+
+---
+
+<Header>エラーハンドリング</Header>
 
 ```
 // 雑にやる
@@ -63,31 +211,42 @@ throw New Error("Oops...");
 class MyError extends Error {}
 throw New MyError("Oops...");
 ```
-- exercise
+---
+
+<Header>エラーハンドリング（演習）</Header>
 
 ---
 
+## ES6
+
+- cons
+- `for in` vs `for of`
+
+- caniuse
+
+---
 # Runtime
 
 - node
 - **browser**
 
+---
+
+<Header>Async性質</Header>
+
+---
+
+### Arrow function
+
+---
+
+## Event loop
+
+- single thread
 
 ---
 
 ## event api
-
-
----
-
-### click event
-```
-addEventListener("click" => {
-	
-})
-```
-
-自前は大変。だからframework
 
 ---
 
@@ -103,12 +262,9 @@ addEventListener("click" => {
 ---
 
 
-
-
----
-
-
 # Modern JavaScript
 
 ---
+
+npm & security
 
