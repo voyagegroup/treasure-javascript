@@ -2,30 +2,31 @@ const displayStatus = (t) => {
 	document.querySelector("#status").textContent = t;
 }
 
-SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
-if (("SpeechRecognition" in window) === false) {
-	alert("SpeechRecognition is not available in your browser.");
+const speechRecognition = () => {
+	if ("SpeechRecognition" in window) {
+	  return new SpeechRecognition();
+	} else if ("webkitSpeechRecognition" in window) {
+	  return new webkitSpeechRecognition();
+	} else {
+	  return undefined;
+	}
 }
 
-recognition = new SpeechRecognition(	);
-recognition.onresult = (event) => {
-  console.log(event);
+const recognition = speechRecognition();
+
+recognition.lang = "ja-JP";
+recognition.onstart = function() {
+	displayStatus("音声認識スタート");
 }
-// recognition.start();
 
-// const recognition = new SpeechRecognition();
-// recognition.lang = "ja-JP";
-// recognition.start();
+recognition.onresult = function(event) {
+	alert(event.results[0][0].transcript);
+}
 
-// recognition.onstart = function() {
-// 	displayStatus("音声認識スタート");
-// }
+recognition.onerror = function(event) {
+  displayStatus(event.error);
+}
 
-// recognition.onresult = function(event) {
-// 	console.log(event);
-// 	alert(event.results[0][0].transcript)
-// }
-
-// recognition.onerror = function(event) {
-//   displayStatus("音声認識ストップ");
-// }
+document.querySelector("#startSpeech").addEventListener("click", function(e) {
+	recognition.start();
+});
