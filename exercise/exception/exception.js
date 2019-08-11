@@ -10,6 +10,7 @@ function primitiveMultiply(a, b) {
 
 function reliableMultiply(a, b) {
   // code here
+  return primitiveMultiply(a, b);
 }
 
 console.log(reliableMultiply(4, 4));
