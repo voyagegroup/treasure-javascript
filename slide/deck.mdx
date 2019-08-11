@@ -215,45 +215,53 @@ throw New MyError("Oops...");
 ### Arrow function
 
 ---
+
 # Runtime
 
 - node
 - **browser**
 
 ---
+<Header>Event Loop</Header>
 
-<Header>Single Thread</Header>
-
-- one call stack
-- one memory heap
-
----
-
-<Header>Async & Sync</Header>
-
-- Javascript Engineとのインターフェースはasync, sync APIがある
-- `window.alert()`はsync, `window.setTimeout()`はasync
-
+- JavaScriptはsingle thread
+- Javascript Engineとのインターフェースは大体async
+- Get off the main thread
 
 ---
+<Header>How to block Event Loop</Header>
+
+- `window.alert()`はblock
+- [sync `XMLHttpRequest`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests#Example_HTTP_synchronous_request)
 
 ```
-window.addEventListener("click", function() {
-	for (;;) {}
-});
+var request = new XMLHttpRequest();
+// `false` makes the request synchronous
+request.open('GET', '/heavyRequest', false);
+request.send();
 ```
 
 ---
 
-<Header>Async, defer</Header>
-
-<script src="somejs"></script>
-<script src="somejs" async></script>
-<script src="somejs" defer></script>
+<Header>How to not block Event Loop</Header>
 
 ---
 
-## Event loop
+<Header>Async, defer script</Header>
+
+<img src="https://www.growingwiththeweb.com/images/2014/02/26/async-vs-defer-twitter.png" />
+
+* https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html
+
+```
+<script src="sync.js"></script>
+<script src="async.js" async></script>
+<script src="defer.js" defer></script>	
+```
+
+---
+
+<Header>Event loop</Header>
 
 ---
 
@@ -288,18 +296,18 @@ document.querySelector("#clickMe").addEventListener("click", function(e) {})
 
 <Header>Event Propagation（演習）</Header>
 
-https://jsbin.com/zamixot/edit?html,js,console,output
+- https://jsbin.com/zamixot/edit?html,js,console,output
 
 ---
 
-### audio event
+<Header>Audio Event</Header>
+
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio
 - https://github.com/notthetup/awesome-webaudio#readme
 
 ---
 
-
-### Fetch API（演習）
+<Header>Fetch API（演習）</Header>
 
 ---
 
@@ -315,11 +323,9 @@ https://jsbin.com/zamixot/edit?html,js,console,output
 
 <Header>テスト（演習）</Header>
 
-
 ---
 
 <Header>npmとセキュリティー</Header>
-
 
 ---
 
