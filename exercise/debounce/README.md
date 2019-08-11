@@ -1,4 +1,4 @@
-課題：fix the test
+### �ۑ�: fix the test
 
 ```
 npm test
