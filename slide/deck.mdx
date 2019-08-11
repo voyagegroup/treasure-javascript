@@ -5,7 +5,6 @@ import {
 } from 'mdx-deck'
 
 import highlight from '@mdx-deck/themes/syntax-highlighter'
-import { swiss as mdxTheme } from '@mdx-deck/themes'
 import provider from './component/provider'
 import Header from './component/header'
 
@@ -13,22 +12,21 @@ export const theme = {
   ...highlight,
   ...provider,
   ...mdxTheme,
-  css: {
-    padding: "0 10%"
+  fonts: {
+    body: 'Futura, sans-serif',
+    monospace: '"Dank Mono", monospace;',
   },
-  font: 'Nunito, sans-serif',
-  googleFont: 'https://fonts.googleapis.com/css?family=Nunito:300,300i,700',
-  code: {
+  colors: {
+    text: 'rgb(106, 215, 152)',
+    background: 'rgb(1, 22, 39)',
+    primary: 'white',
   },
-  pre: {
-    fontSize: `28px`,
-    lineHeight: `42px`,
-    color: `#fff !important`
-  },
-  heading: {
-    position: `relative`,
-    zIndex: `1000`,
-    textTransform: `none`
+  styles: {
+    Slide: {
+      display: 'block',
+      padding: '1em',
+      textAlign: 'left',
+    },
   },
 }
 
@@ -44,7 +42,7 @@ export const theme = {
 
 <SplitRight>
 
-I just had to take the hypertext idea and connect it to the Transmission Control Protocol and domain name system ideas and—ta-da! —the World Wide Web" - Tim Berners-Lee
+"I just had to take the hypertext idea and connect it to the Transmission Control Protocol and domain name system ideas and—ta-da! —the World Wide Web" - Tim Berners-Lee
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Sir_Tim_Berners-Lee_%28cropped%29.jpg/440px-Sir_Tim_Berners-Lee_%28cropped%29.jpg" />
 
@@ -85,7 +83,7 @@ I just had to take the hypertext idea and connect it to the Transmission Control
 
 <Split>
 
-I do not claim to have invented JSON. It already existed in nature. - Douglas Crockford
+"I do not claim to have invented JSON. It already existed in nature." - Douglas Crockford
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Douglas_Crockford%2C_February_2013.jpg/400px-Douglas_Crockford%2C_February_2013.jpg" />
 
@@ -268,7 +266,7 @@ request.send();
 
 <img src="https://www.growingwiththeweb.com/images/2014/02/26/async-vs-defer-twitter.png" />
 
-* https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html
+* [Growing With The Web](https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html)
 
 ```
 <script src="sync.js"></script>

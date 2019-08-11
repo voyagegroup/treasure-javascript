@@ -4,7 +4,7 @@ import Footer from './footer'
 const Provider = ({ children, index, slides }) => (
   <div css={{
     a: {
-      textDecoration: 'none'
+      textDecoration: 'underline'
     },
   }}>
     {children}
