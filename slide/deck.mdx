@@ -29,7 +29,23 @@ export const theme = {
   },
 }
 
-<Header>JavaScript</Header>
+<Header>JavaScript (Web)</Header>
+
+---
+
+<Header>歴史</Header>
+
+---
+
+<Header>大昔：天地創造</Header>
+
+- 1日: 神は天と地をつくられた
+- 2日: 神は空（天）をつくられた
+- 3日: 神は大地を作り海が生まれ地に植物をはえさられた
+- 4日: 神は太陽と月と星をつくられた
+- 5日: 神は魚と鳥をつくられた
+- 6日: 神は獣と家畜をつくり、神に似せた人をつくられた
+- 7日: 神はお休みになった
 
 ---
 
@@ -46,7 +62,6 @@ export const theme = {
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Sir_Tim_Berners-Lee_%28cropped%29.jpg/440px-Sir_Tim_Berners-Lee_%28cropped%29.jpg" />
 
 </SplitRight>
-
 
 ---
 
@@ -234,6 +249,13 @@ throw New MyError("Oops...");
 
 - node
 - **browser**
+- ...
+
+---
+
+<Header>Browser</Header>
+
+- https://caniuse.com
 
 ---
 <Header>Event Loop</Header>
@@ -323,11 +345,132 @@ document.querySelector("#clickMe")
 
 ---
 
+<Header>Promiseについて</Header>
+
+- https://promisesaplus.com
+
+---
+
+<Header>事前課題の振り返り: new Promise</Header>
+
+```javascript
+function request(url, method) {
+  return new Promise((resolve, reject) => {
+    fetch(url); 
+  });
+}
+```
+
+- https://github.com/VG-Tech-Dojo/treasure2019-pre/pull/200#issuecomment-518703698
+
+---
+
+<Header>事前課題の振り返り: new Promise</Header>
+
+```javascript
+function promisifiedXhr() {}
+  return new Promise((resolve, reject) => {
+        ...
+        xhr.onload = () => { 
+          resolve(xhr.responseText);
+        };
+        xhr.send();
+  });
+}
+```
+
+---
+
+<Header>Promise</Header>
+
+```
+fetch("url").then(function(res) {
+  // 1. return fetch(...)
+  // 2. return res.json()
+  // 3. throw new Error()
+  // 4. side effect (UIを変えるとか)
+})
+```
+
+---
+
+<Header>よくないPromise</Header>
+
+```
+fetch("url").then(function(res) {
+  if (res.ok) {
+    return fetch(res.url).then(...);
+  }
+  throw new Error("...");
+});
+```
+
+- [実例](https://github.com/blackberry/BB10-WebWorks-Community-Samples/blob/d6ee75fe23a10d2d3a036013b6b1a0c07a542099/pdbtest/www/js/index.js#L190-L220)
+
+---
+
+<Header>よいPromise</Header>
+
+```
+fetch("url").then(function(res) {
+  if (res.ok) {
+    return fetch(res.url);
+  }
+  throw new Error("...");
+}).then(...);
+```
+
+- [実例](https://github.com/blackberry/BB10-WebWorks-Community-Samples/blob/d6ee75fe23a10d2d3a036013b6b1a0c07a542099/pdbtest/www/js/index.js#L190-L220)
+
+---
+
+<Header>Promise tips #1: Composition</Header>
+
+```
+fetch(function(res) {
+  return res.json();
+}).catch(function(error) {
+  display(error);
+});
+```
+
+---
+
+<Header>Promise tips #1: Composition</Header>
+
+```
+function parseJson(res) { 
+  return res.json();
+}
+
+fetch.then(parseJson).catch(display);
+```
+
+- [事前課題#1](https://github.com/VG-Tech-Dojo/treasure2019-pre/pull/75/files#diff-f58a1c1777a78f97fad303b5dd8e7e15R7-R28)
+
+---
+
+<Header>Promise tips #2: Catch last</Header>
+
+```javascript
+fetch.then(parseJson)
+  .catch(display) // いらない
+  .then(transform)
+  .catch(display);
+```
+
+```javascript
+fetch.then(parseJson)
+  .then(transform)
+  .catch(display)
+```
+
+---
+
 <Header>Fetch API（演習）</Header>
 
-- always `throw new Error()` when error
-- PRを待ってます
 - https://github.com/voyagegroup/treasure-javascript/tree/master/exercise/fetch
+- PRを待ってます
 
 ---
 
@@ -358,3 +501,4 @@ document.querySelector("#clickMe")
 
 Links
  - https://dev.to/steelvoltage/if-javascript-is-single-threaded-how-is-it-asynchronous-56gd
+ - https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
