@@ -187,6 +187,8 @@ npm install ...
 <Header>JavaScriptおやおや#1:Type</Header>
 
 ```
+1 + 1
+1 + "1"
 [] + []
 [] + {}
 {} + []
@@ -228,7 +230,7 @@ throw New MyError("Oops...");
 
 ---
 
-# Runtime
+<Header>Runtime</Header>
 
 - node
 - **browser**
@@ -258,6 +260,7 @@ request.send();
 <Header>How to not block Event Loop</Header>
 
 - https://github.com/voyagegroup/treasure-javascript/tree/master/exercise/block
+- PRを待ってます
 
 ---
 
@@ -277,11 +280,15 @@ request.send();
 
 <Header>Click Event</Header>
 
-```
+```javascript
 <button id="clickMe">Click Me</button>
+```
+```
+document.querySelector("#clickMe")
+  .onclick = function(e) {}
 
-document.querySelector("#clickMe").onclick = function(e) {}
-document.querySelector("#clickMe").addEventListener("click", function(e) {})
+document.querySelector("#clickMe")
+  .addEventListener("click", function(e) {})
 ```
 
 ---
@@ -289,14 +296,14 @@ document.querySelector("#clickMe").addEventListener("click", function(e) {})
 <Header>Event Propagation</Header>
 
 ```
- ----------------------------
-|            #o              |
-|     ----------------       |
-|    |                |      |
-|    |       #i       |      |
-|    |                |      |
-|     ----------------       |
- ----------------------------     
+       ----------------------------
+      |            #o              |
+      |     ----------------       |
+      |    |                |      |
+      |    |       #i       |      |
+      |    |                |      |
+      |     ----------------       |
+       ----------------------------     
 ```
 
 ---
@@ -304,13 +311,14 @@ document.querySelector("#clickMe").addEventListener("click", function(e) {})
 <Header>Event Propagation（演習）</Header>
 
 - https://github.com/voyagegroup/treasure-javascript/tree/master/exercise/event
+- PRを待ってます
 
 ---
 
 <Header>SpeechRecognition Event（演習）</Header>
 
-
 - https://github.com/voyagegroup/treasure-javascript/tree/master/exercise/speechrecognition
+- PRを待ってます
 - https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition
 
 ---
@@ -318,6 +326,7 @@ document.querySelector("#clickMe").addEventListener("click", function(e) {})
 <Header>Fetch API（演習）</Header>
 
 - always `throw new Error()` when error
+- PRを待ってます
 - https://github.com/voyagegroup/treasure-javascript/tree/master/exercise/fetch
 
 ---
@@ -342,6 +351,7 @@ document.querySelector("#clickMe").addEventListener("click", function(e) {})
 
 - https://github.com/substack/tape
 - https://github.com/voyagegroup/treasure-javascript/tree/master/exercise/debounce
+- PRを待ってます
 
 
 ---

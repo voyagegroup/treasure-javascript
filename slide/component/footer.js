@@ -17,10 +17,13 @@ const Footer = ({ index }) => (
       li: {
         padding: 8
       },
+      color: "white",
+      a: {
+          color: "white"
+      },
     }}
   >
-    <li>{index}</li>
-    <li css={{ flexGrow: 1 }}></li>
+    <li>2019 Treasure JavaScript (<a href="https://github.com/voyagegroup/treasure-javascript/tree/master/slide">source</a>)</li>
   </ul>
 )
 
