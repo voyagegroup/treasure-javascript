@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-</head>
-<body>
-	<script type="module">
-		import {debounce} from "./debounce.js";
-		window.addEventListener('click', debounce((e) => {
-		  console.log(e);
-		}, 1000));
-	</script>
-</body>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <script type="module">
+      import { debounce } from './debounce.js'
+      window.addEventListener(
+        'click',
+        debounce(e => {
+          console.log(e)
+        }, 1000)
+      )
+    </script>
+  </body>
 </html>
