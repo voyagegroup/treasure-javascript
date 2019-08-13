@@ -1,5 +1,9 @@
 課題：最強なfetchを実装する
 
+### install
+```
+npm install
+```
 
 ### start json server
 ```

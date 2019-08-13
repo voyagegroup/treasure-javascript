@@ -1,6 +1,7 @@
-### ‰Û‘è: fix the test
+### èª²é¡Œ: fix the test
 
 ```
+npm install
 npm test
 > babel-node *.test.js
 
