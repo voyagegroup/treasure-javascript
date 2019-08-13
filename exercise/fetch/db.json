@@ -5,5 +5,19 @@
       "title": "treasure",
       "author": "yang-wei"
     }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "post_id": 1,
+      "content": "Hi this is a comment",
+      "user": 1
+    },
+    {
+      "id": 2,
+      "post_id": 1,
+      "content": "Hi this is another comment",
+      "user": 2
+    }
   ]
 }

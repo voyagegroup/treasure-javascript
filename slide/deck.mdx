@@ -116,6 +116,10 @@ export const theme = {
 
 ---
 
+<Header>2006: ???</Header>
+
+---
+
 <Header>2006: jQuery</Header>
 
 <Split>
@@ -211,6 +215,21 @@ npm install ...
 {} + []
 {} + {}
 ```
+
+---
+
+<Header>JavaScriptおやおや#1:Type</Header>
+
+```
+// やらない
+if (a) {}
+if (a == true) {}
+
+// ok
+if (typeof a === "string") {}
+if (a === true) {}
+```
+
 - use `===` over `==`
 
 ---
@@ -223,8 +242,19 @@ for (var i = 0; i < 5; i++){
 }
 console.log(i)
 ```
-- const > let > var
+---
 
+<Header>JavaScriptおやおや#2:グローバル関数</Header>
+
+なにがおきった？
+
+```
+var i;
+for (i = 0; i < 5; i++){
+  console.log(i)
+}
+console.log(i)
+```
 ---
 
 <Header>エラーハンドリング</Header>
@@ -267,7 +297,7 @@ throw New MyError("Oops...");
 - Get off the main thread
 
 ---
-<Header>How to block Event Loop</Header>
+<Header>Event Loopのブロック</Header>
 
 - `window.alert()`はblock
 - [sync `XMLHttpRequest`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests#Example_HTTP_synchronous_request)
@@ -281,7 +311,7 @@ request.send();
 
 ---
 
-<Header>How to not block Event Loop</Header>
+<Header>Event Loopをブロックしないように</Header>
 
 - https://github.com/voyagegroup/treasure-javascript/tree/master/exercise/block
 - PRを待ってます
@@ -294,12 +324,24 @@ request.send();
 
 * [Growing With The Web](https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html)
 
+---
+
+<Header>Async, defer script</Header>
+
 ```
 <script src="sync.js"></script>
 <script src="async.js" async></script>
 <script src="defer.js" defer></script>	
 ```
+---
 
+<Header>Async, defer script（演習）</Header>
+
+```
+<script src="sync.js"></script>
+<script src="async.js" async></script>
+<script src="defer.js" defer></script>
+```
 ---
 
 <Header>Click Event</Header>
@@ -497,7 +539,6 @@ fetch.then(parseJson)
 - https://github.com/substack/tape
 - https://github.com/voyagegroup/treasure-javascript/tree/master/exercise/debounce
 - PRを待ってます
-
 
 ---
 
