@@ -9,7 +9,7 @@ npm install
 ```
 node -v
 npm start
-open http://localhost:3000/
+open http://localhost:3001/
 ```
 
 1. GET http://localhost:3001/posts
