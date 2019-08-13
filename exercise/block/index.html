@@ -41,7 +41,8 @@ document.querySelector("#nonblock").addEventListener("click", function() {
 		return function r() {
 			if (c++ < times) {
 				heavyCount("#nonblockCounter", c);
-				setTimeout(r, 0);
+        // TODO:ここを変える
+				r();
 			} else {
 				alert("Done");	
 			}
@@ -83,7 +84,7 @@ document.querySelector("#nonblock").addEventListener("click", function() {
 		return function r() {
 			if (c++ < times) {
 				heavyCount("#nonblockCounter", c);
-				setTimeout(r, 0);
+				r();
 			} else {
 				alert("Done");	
 			}
