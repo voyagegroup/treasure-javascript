@@ -1,4 +1,9 @@
-class MultiplicatorError extends Error {}
+class MultiplicatorError extends Error {
+  constructor(...args) {
+    super(...args)
+    this.name = args[0]
+  }
+}
 
 function primitiveMultiply(a, b) {
   if (Math.random() < 0.2) {
@@ -9,8 +14,13 @@ function primitiveMultiply(a, b) {
 }
 
 function reliableMultiply(a, b) {
-  // code here
-  return primitiveMultiply(a, b);
+  try{
+    return primitiveMultiply(a, b);
+  }catch(err){
+    if (err instanceof MultiplicatorError) {
+      return err.name
+    }
+  }
 }
 
 console.log(reliableMultiply(4, 4));
