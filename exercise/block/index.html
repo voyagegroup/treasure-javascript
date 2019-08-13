@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Async vs sync</title>
-	<style type="text/css">
-		pre {
-		    background: #f4f4f4;
-		    border-left: 3px solid #f36d33;
-		    font-size: 20px;
-		    padding-left: 20px;
-		}
-	</style>
-</head>
-<body>
-	<h1>Treasure</h1>
-	<button id="block">Block</button> <span id="blockCounter">0</span>
-	<pre>
+  <head>
+    <title>Async vs sync</title>
+    <style type="text/css">
+      pre {
+        background: #f4f4f4;
+        border-left: 3px solid #f36d33;
+        font-size: 20px;
+        padding-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Treasure</h1>
+    <button id="block">Block</button> <span id="blockCounter">0</span>
+    <pre>
 		<code>
 document.querySelector("#block").addEventListener("click", function() {
 	function heavyLoops() {
@@ -32,32 +32,30 @@ document.querySelector("#block").addEventListener("click", function() {
 });</code>		
 	</pre>
 
-  	<script type="text/javascript">
+    <script type="text/javascript">
+      const times = 1000
+      function heavyCount(e, text) {
+        console.log(text)
+        const b = document.querySelector(e)
+        window.getComputedStyle(b)
+        b.textContent = text
+      }
 
-  	const times = 1000;
-  	function heavyCount(e, text) {
-  		console.log(text);
-  		const b = document.querySelector(e);
-  		window.getComputedStyle(b);
-  		b.textContent = text;
-  	}
-
-document.querySelector("#block").addEventListener("click", function() {
-	function heavyLoops() {
-		let c = 0;
-		return function r() {
-			if (c++ < times) {
-				heavyCount("#blockCounter", c);
-				//TODO: change here
-				r();
-			} else {
-				alert("Done");	
-			}
-		}
-	}
-	heavyLoops()()
-});
-
-  	</script>
-</body>
+      document.querySelector('#block').addEventListener('click', function() {
+        function heavyLoops() {
+          let c = 0
+          return function r() {
+            if (c++ < times) {
+              heavyCount('#blockCounter', c)
+              //TODO: change here
+              setTimeout(r, 0)
+            } else {
+              alert('Done')
+            }
+          }
+        }
+        heavyLoops()()
+      })
+    </script>
+  </body>
 </html>
