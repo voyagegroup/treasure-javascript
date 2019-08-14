@@ -20,18 +20,15 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
-	let count = 1;
-
 	// change this
 	const request = function(method, url, body=null) {
 		return fetch(url,{method, body}).then(response => {
 			if (response.ok) {
 				return response.json()
 			} else {
-				if (count === 5) {
+				if (response.status !== 503) {
 					throw new Error('Response invalid');
 				} else {
-					count += 1
 					return request(method, url);
 				}
 			}
@@ -77,7 +74,7 @@
 	//requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+	requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
 	// getPost(['http://localhost:3001/posts/1', 'http://localhost:3001/comments?post_id=1']).then(successHandler).catch(errorHandler)
