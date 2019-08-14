@@ -24,26 +24,43 @@
 
 	// change this
 	const request = function(method, url) {
-		return fetch(url,{
+		const time = 1000
+
+		// const timeout = (time) => new Promise((resolve, reject) => {
+		// 	setTimeout(() => {
+		// 		reject("timeout error")
+		// 	}, time)
+		// });
+
+		const req = (url, method) => fetch(url,{
 			method
 		})
 			.then(res => {
 				if (res.ok) {
 					return parseJson
 				} else {
-					throw new Error("4xx error");
+					if (res.status <= 400 && 500 <= res.status) {
+						throw new Error("4xx error");
+					} else  {
+						throw new Error("5xx error");
+					}
 				}
 			})
+
+		return Promise.race([
+			// timeout(time),
+			req(url, method)
+		])
 	}
 
 	// #1 GET 2xx
 	//request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
-  request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
+  // request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
