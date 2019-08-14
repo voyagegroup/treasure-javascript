@@ -28,16 +28,22 @@
         }`;
       };
 
-      const parseJson = res =>
-        function() {
-          return res.json();
-        };
+      // const parseJson = res =>
+      //   function() {
+      //     return res.json();
+      //   };
 
       // change this
       const request = function(method, url) {
         return fetch(url).then(function(res) {
           if (res.ok) {
-            return res.json();
+            console.log(res);
+            try {
+              JSON.parse(res);
+              return res.json();
+            } catch (error) {
+              return res.text();
+            }
           }
           if (res.status < 500) {
             throw new Error("4xx error");
@@ -57,12 +63,14 @@
       //   .catch(errorHandler);
 
       // #3 GET 5xx
-      request("GET", "http://localhost:3001/timeout")
-        .then(successHandler)
-        .catch(errorHandler);
+      // request("GET", "http://localhost:3001/timeout")
+      //   .then(successHandler)
+      //   .catch(errorHandler);
 
       // #4 GET 2xx but not json
-      // request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
+      request("GET", "http://localhost:3001/index.html")
+        .then(successHandler)
+        .catch(errorHandler);
 
       // #5 PUT
       // request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
