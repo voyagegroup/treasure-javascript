@@ -43,10 +43,14 @@
 				if (res.ok) {
 					return parseJson(res)
 				} else {
-					if (400 <= res.status && res.status < 500) {
-						throw new Error("4xx error");
-					} else  {
-						throw new Error("5xx error");
+					switch(res.status) {
+						case 404:
+							throw new Error("404 error")
+						case 503:
+							return request(method, url, body)
+							break
+						case 504:
+							throw new Error("504 error")
 					}
 				}
 			})
@@ -81,10 +85,10 @@
 	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "ramenjuniti" }).then(successHandler).catch(errorHandler)
 
 	// #6 GET /timeout with Timeout
-	requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	// requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+	requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
 
