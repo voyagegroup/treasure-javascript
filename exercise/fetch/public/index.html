@@ -37,6 +37,10 @@
       const request = function(method, url) {
         return fetch(url).then(function(res) {
           if (res.ok) {
+            console.log(res.status);
+            if (res.status == 200 && method == "PUT") {
+              return "success!!";
+            }
             try {
               JSON.parse(res);
               return res.json();
@@ -73,9 +77,9 @@
 
       // #5 PUT
       request("PUT", "http://localhost:3001/posts/1", {
-        id: 1,
-        title: "treasure",
-        author: "{{CHANGE YOUR NAME}}"
+        id: 2,
+        title: "お昼ご飯",
+        author: "{{okkkkkkk}}"
       })
         .then(successHandler)
         .catch(errorHandler);
