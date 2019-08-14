@@ -20,8 +20,16 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
-	const parseJson = (res) => res.json()
-
+	const parseJson = (res) => {
+		return res.text()
+			.then(text => {
+				try {
+					return JSON.parse(text)
+				} catch {
+					throw new Error("Faild to parse JSON")
+				}
+			})
+	}
 	// change this
 	const request = function(method, url) {
 		const time = 1000
@@ -37,7 +45,7 @@
 		})
 			.then(res => {
 				if (res.ok) {
-					return parseJson
+					return parseJson(res)
 				} else {
 					if (res.status <= 400 && 500 <= res.status) {
 						throw new Error("4xx error");
@@ -60,10 +68,10 @@
   // request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
-	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
 
 	// #5 PUT
 	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
