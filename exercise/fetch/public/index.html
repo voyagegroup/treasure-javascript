@@ -24,14 +24,23 @@
 
 	// change this
 	const request = function(method, url) {
-		return fetch(url, {method}).then(parseJson)
+		return fetch(url,{
+			method
+		})
+			.then(res => {
+				if (res.ok) {
+					return parseJson
+				} else {
+					throw new Error("4xx error");
+				}
+			})
 	}
 
 	// #1 GET 2xx
-	request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+	//request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
-	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
+  request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
 	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
