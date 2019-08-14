@@ -22,20 +22,52 @@
 
 	// change this
 	const request = function(method, url) {
+		const handleErrors = (res) => {
+			if (res.ok) {
+				return res;
+			}
+
+			switch (res.status) {
+				case 400: throw Error('INVALID_TOKEN');
+				case 401: throw Error('UNAUTHORIZED');
+				case 500: throw Error('INTERNAL_SERVER_ERROR');
+				case 502: throw Error('BAD_GATEWAY');
+				case 504: throw Error('Timeout');
+				case 404: throw Error('NOT_FOUND');
+				default:  throw Error('UNHANDLED_ERROR');
+			}
+		}
+
 		return fetch(url)
+		.then(handleErrors)
+		.then(function(response) {
+			return response.json();
+		})
+	
+		// .then(function(myJson) {
+		// 	console.log(JSON.stringify(myJson));
+		// });
+
+
+		// return fetch(url).then(res => {
+		// 	if (res.ok) {
+		// 		return ParseJson(res)
+		// 	}
+		// 	throw new Error("4xx Error");
+		// })
 	}
 
 	// #1 GET 2xx
-	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
-	// #2 GET 4xx
-	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
+	//2 GET 4xx
+	request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
-	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
 
 	// #5 PUT
 	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
