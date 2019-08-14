@@ -20,19 +20,43 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
+	const parseJson = function parseJson(res) {
+		return new Promise(function(resolve, reject) {
+			try {
+				resolve(JSON.parse(res.text()));
+			} catch (e) {
+				throw new Error(e)
+			}
+		})
+	}
+
+	// const timeout = function timeout(ms, promise) {
+	// 	return new Promise(function(resolve, reject) {
+	// 		setTimeout(function() {
+	// 			reject(new Error("timeout"));
+	// 		}, ms);
+	// 		promise.then(resolve, reject);
+	// 	});
+	// }
+
 	// change this
 	const request = function(method, url) {
-		return fetch(url)
+		return fetch(url).then(function(res) {
+			if (res.ok) {
+				return parseJson(res);
+			}
+			throw new Error(res.status);
+		});
 	}
 
 	// #1 GET 2xx
-	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
 	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
