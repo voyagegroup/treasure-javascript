@@ -13,6 +13,7 @@ const speechRecognition = () => {
 }
 
 const recognition = speechRecognition();
+recognition.continuous = true;
 
 recognition.lang = "ja-JP";
 recognition.onstart = function() {
@@ -20,7 +21,7 @@ recognition.onstart = function() {
 }
 
 recognition.onresult = function(event) {
-	alert(event.results[0][0].transcript);
+	console.log(event.results[0][0].transcript);
 }
 
 recognition.onerror = function(event) {

@@ -48,10 +48,10 @@ document.querySelector("#block").addEventListener("click", function() {
 		return function r() {
 			if (c++ < times) {
 				heavyCount("#blockCounter", c);
-				//TODO: change here
+				setTimeout(r, 0)
 				r();
 			} else {
-				alert("Done");	
+				alert("Done");
 			}
 		}
 	}

@@ -8,9 +8,20 @@ function primitiveMultiply(a, b) {
   }
 }
 
+let cnt = 0;
 function reliableMultiply(a, b) {
   // code here
-  return primitiveMultiply(a, b);
+  try{
+    return primitiveMultiply(a, b)
+  }
+  catch(e) {
+    if(e instanceof MultiplicatorError){
+      cnt++;
+      return reliableMultiply(a, b)
+    }
+  }
+
 }
 
 console.log(reliableMultiply(4, 4));
+console.log(cnt);

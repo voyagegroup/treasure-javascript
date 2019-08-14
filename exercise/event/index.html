@@ -28,11 +28,12 @@
 	</div>
 	<script type="text/javascript">
 		document.querySelector("#outside-container").addEventListener("click", function() {
-		  	console.log("outside")
+			  console.log("outside")
 		});
 
-		document.querySelector("#inside-container").addEventListener("click", function() {
-		  	console.log("inside");
+		document.querySelector("#inside-container").addEventListener("click", function(e) {
+			e.stopPropagation();
+			console.log("inside");
 		});
 	</script>
 </body>
