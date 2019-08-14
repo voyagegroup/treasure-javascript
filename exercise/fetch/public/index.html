@@ -35,15 +35,6 @@
 			})
 		}
 
-		let IsJSON = (str) => {
-			try {
-				JSON.parse(str)
-			} catch (e) {
-				return false
-			}
-			return true
-		}
-
 		// #1 GET 2xx
 		// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
