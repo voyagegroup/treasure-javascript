@@ -20,11 +20,17 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
+	class RetryError extends Error{}
+
 	const checkStatus = function checkStatus(res) {
 		if (res.ok) {
 			return res;
+		} else {
+			if (res.status == 503) {
+				throw new RetryError()
+			}
+			throw new Error(res.status);
 		}
-		throw new Error(res.status);
 	}
 
 	const parseJson = function parseJson(t) {
@@ -49,11 +55,16 @@
 				"Content-Type": "application/json; charset=utf-8",
             },
 			body: JSON.stringify(data),
-		}).then(checkStatus)
+		})
+		.then(checkStatus)
 		.then(parseText)
 		.then(parseJson)
 		.catch(function(err) {
-			throw new Error(err);
+			if (err instanceof RetryError) {
+				return request(method, url, data);
+			} else {
+				throw new Error(err);
+			}
 		});
 	}
 
@@ -88,9 +99,9 @@
 	//requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
-	requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
-	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
+	#8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
 
 	</script>
 </body>
