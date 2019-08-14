@@ -10,23 +10,23 @@ server.use(middlewares)
 
 // Add custom routes before JSON Server router
 server.get('/timeout', async (req, res) => {
-	const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
-	await sleep(10000)
+  const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
+  await sleep(10000)
     res.status(504).jsonp({
-    	error: "Gateway Timeout"
-  	})
+      error: "Gateway Timeout"
+    })
 })
 
 // Add custom routes before JSON Server router
 server.get('/retryme', (req, res) => {
   if (Math.random() < 0.2) {
-   res.status(200).jsonp({
-    	message: "Nice try. You are lucky!"
+    res.status(200).jsonp({
+      message: "Nice try. You are lucky!"
     });
   } else {
-  	res.status(500).jsonp({
-    	error: "Server Internal Error. Please retry again."
-  	});
+    res.status(500).jsonp({
+      error: "Server Internal Error. Please retry again."
+    });
   }
 })
 
