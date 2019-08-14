@@ -1,5 +1,4 @@
 const jsonServer = require('json-server')
-//const sleep = require('sleep')
 
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
@@ -9,13 +8,13 @@ const port = 3001
 server.use(middlewares)
 
 // Add custom routes before JSON Server router
-//server.get('/timeout', async (req, res) => {
-	//const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
-//	await sleep(10000)
-//    res.status(504).jsonp({
-//    	error: "Gateway Timeout"
-//  	})
-//})
+server.get('/timeout', async (req, res) => {
+	const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
+	await sleep(10000)
+   res.status(504).jsonp({
+   	error: "Gateway Timeout"
+ 	})
+})
 
 // Add custom routes before JSON Server router
 
