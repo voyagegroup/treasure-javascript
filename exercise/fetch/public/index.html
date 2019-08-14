@@ -27,7 +27,7 @@
 			return res;
 		} else {
 			if (res.status == 503) {
-				throw new RetryError()
+				throw new RetryError();
 			}
 			throw new Error(res.status);
 		}
@@ -46,16 +46,15 @@
 		return res.text();
 	}
 
-	// change this
 	const request = function(method, url, data) {
-		console.log(data);
-		return fetch(url, {
+		const options = {
 			method: method,
 			headers: {
 				"Content-Type": "application/json; charset=utf-8",
             },
 			body: JSON.stringify(data),
-		})
+		}
+		return fetch(url, options)
 		.then(checkStatus)
 		.then(parseText)
 		.then(parseJson)
@@ -101,8 +100,13 @@
 	// #7 GET /retryme until success
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
-	#8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
-
+	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
+	Promise.all([request("GET", "http://localhost:3001/posts/1"), request("GET", "http://localhost:3001/comments?post_id=1")]).then(res => {
+		return Object.assign({}, {
+			posts: res[0],
+			comments: res[1],
+		})
+	}).then(successHandler).catch(errorHandler)
 	</script>
 </body>
 </html>
