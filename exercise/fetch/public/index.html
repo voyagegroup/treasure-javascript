@@ -38,24 +38,20 @@
     return res
   }
 
-  const parseResponse = (res) => {
-    return res.json().catch((e) =>{
+  const parseResponse = (res) =>
+    res.json().catch((e) =>{
       throw new Error("jsonパースできんかった、、、ごめん")
     })
-  }
 
-  const set_timeout = (time) => {
-    return new Promise((_, reject) => setTimeout(() => reject(new Error("タイムアウト")), time))
-  }
+  const set_timeout = (time) => new Promise((_, reject) => setTimeout(() => reject(new Error("タイムアウト")), time))
 
-  const requestWithTimeout = (timeout) => {
-    return (method, url) => (
+  const requestWithTimeout = (timeout) =>
+    (method, url) => (
       Promise.race([
         set_timeout(timeout),
         request(method, url)
       ])
     )
-  }
 
 	// change this
 	const request = function(method, url) {
@@ -91,13 +87,13 @@
 	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
 
 	// #6 GET /timeout with Timeout
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
-  requestAll([request("GET", "http://localhost:3001/posts/1"), request("GET", "http://localhost:3001/comments?post_id=1")])
+  // requestAll([request("GET", "http://localhost:3001/posts/1"), request("GET", "http://localhost:3001/comments?post_id=1")])
 
 	</script>
 </body>
