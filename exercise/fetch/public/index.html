@@ -51,6 +51,20 @@
           return fetch(url, { method: method }).then(statusHandler).then(parseResponse)
 	}
 
+        const timeoutPromise = function(duration) {
+          return new Promise(function(resolve, reject) {
+            setTimeout(reject, duration, "Client Timeout\n");
+          });
+        } 
+
+        const requestWithTimeout = function(duration) {
+          return function(method, url, body={}, headers={}) {
+            return Promise.race([request(method, url, body, headers), timeoutPromise(duration)]).catch(function(value) {
+              throw Error(value)
+            })
+          }
+        }
+
 	// #1 GET 2xx
 	request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
@@ -70,7 +84,7 @@
 	requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+	requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
 
