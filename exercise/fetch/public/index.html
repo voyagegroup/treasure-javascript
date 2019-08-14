@@ -21,22 +21,28 @@
 	}
 
 	function parseJson(res) {
-		return res.json();
+		if (res.ok){
+			return res.json();
+		}
+		switch (res.status){
+			case 404: throw Error(error);
+			case 504: throw Error(error);
+		}
 	}
 
 	// change this
 	const request = function(method, url) {
-		return fetch(url).then(parseJson)
+		return fetch(url).then(parseJson);
 	}
 
 	// #1 GET 2xx
-	request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
 	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
