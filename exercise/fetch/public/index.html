@@ -20,9 +20,42 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
+	const parseJson = res => res.json()//res.jsonはエラーが吐けない
 	// change this
 	const request = function(method, url) {
-		return fetch(url)
+		switch(method){
+			case "GET":
+			console.log("get")
+			return fetch(url).then(res => {
+				if (res.ok){  //response ok
+					return res.text().then(res => {
+						try{
+							return JSON.parse(res)
+						}
+						catch(e){
+							console.log("not parse")
+							throw new Error("2xx but not json")
+						}
+					}) // JSON.parse()はエラーをはいてくれる
+				}
+				console.log("$$$$$")
+				if (res.status >= 400 && res.status < 500){
+					throw new Error("4xx error")
+				}
+				throw new Error("5xx error");
+			})
+			break;
+			case "PUT":
+			console.log("put")
+			return fetch(url).then(res => {
+				if (res.ok){
+					console.log(res)
+					return res.text().then(res => {
+						return JSON.parse(res)
+					})
+				}
+			})
+		}
 	}
 
 	// #1 GET 2xx
@@ -32,7 +65,7 @@
 	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
