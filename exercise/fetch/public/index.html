@@ -42,6 +42,19 @@
     })
   }
 
+  const set_timeout = (time) => {
+    return new Promise((_, reject) => setTimeout(() => reject(new Error("hogehoge")), time))
+  }
+
+  const requestWithTimeout = (timeout) => {
+    return (method, url) => (
+      Promise.race([
+        set_timeout(timeout),
+        request(method, url)
+      ])
+    )
+  }
+
 	// change this
 	const request = function(method, url) {
     return fetch(url, { method: method })
