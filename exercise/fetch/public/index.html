@@ -120,6 +120,21 @@
       //     .catch(errorHandler)
 
       // #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
+      const f8 = () => {
+        const list = [
+          { method: 'GET', url: 'http://localhost:3001/posts/1' },
+          { method: 'GET', url: 'http://localhost:3001/comments?post_id=1' }
+        ]
+        const promises = list.map(x => {
+          return request(x.method, x.url)
+            .then(text => text)
+            .catch(err => err)
+        })
+        Promise.all(promises)
+          .then(text => successHandler(text))
+          .catch(err => errorHandler(err))
+      }
+      f8()
     </script>
   </body>
 </html>
