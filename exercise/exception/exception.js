@@ -9,8 +9,14 @@ function primitiveMultiply(a, b) {
 }
 
 function reliableMultiply(a, b) {
-  // code here
-  return primitiveMultiply(a, b);
+  try {
+  	return primitiveMultiply(a, b);	
+  } catch(e) {
+  	if (e instanceof MultiplicatorError) {
+  		return reliableMultiply(a, b);
+  	}
+  	throw e;
+  }
 }
 
 console.log(reliableMultiply(4, 4));

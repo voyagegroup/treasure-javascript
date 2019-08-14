@@ -2,6 +2,10 @@ const displayStatus = (t) => {
 	document.querySelector("#status").textContent = t;
 }
 
+const displayComment = (t) => {
+	document.querySelector("#textarea").textContent = t;
+}
+
 const speechRecognition = () => {
 	if ("SpeechRecognition" in window) {
 	  return new SpeechRecognition();
@@ -20,7 +24,8 @@ recognition.onstart = function() {
 }
 
 recognition.onresult = function(event) {
-	alert(event.results[0][0].transcript);
+	const {transcript} = event.results[0][0];
+	displayComment(transcript);
 }
 
 recognition.onerror = function(event) {
