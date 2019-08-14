@@ -1,7 +1,9 @@
 {
   "posts": [
     {
-      "id": 1
+      "id": 1,
+      "title": "treasure",
+      "author": "yang-wei"
     }
   ],
   "comments": [
