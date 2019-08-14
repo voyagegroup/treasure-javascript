@@ -10,10 +10,10 @@ server.use(middlewares)
 // Add custom routes before JSON Server router
 server.get('/timeout', async (req, res) => {
 	const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
-	await sleep(10000)
-   res.status(504).jsonp({
-   	error: "Gateway Timeout"
- 	})
+	await sleep(3000)
+    res.status(504).jsonp({
+    	error: "Gateway Timeout"
+  	})
 })
 
 // Add custom routes before JSON Server router
