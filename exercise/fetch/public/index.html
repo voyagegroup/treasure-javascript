@@ -22,6 +22,33 @@
 				document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 			}
 
+			const requestUtil = (method, url, body = {}) => {
+				if (method !== "GET") {
+					return fetch(url, {
+						method: method,
+						headers: {
+							"Content-Type": "application/json; charset=utf-8",
+						},
+						body: JSON.stringify(body),
+					}).then(parseJson)
+				} else {
+					return fetch(url).then(parseJson)
+				}
+			}
+
+			const timeOutUtil = time => {
+				return new Promise(function (resolve, reject) {
+					setTimeout(reject, time);
+				});
+			}
+			const requestWithTimeout = (time) => {
+				return function (method, url, body = {}) {
+					return Promise.race([requestUtil(method, url, body), timeOutUtil(time)]).catch(e => {
+						throw new Error(`timeout error for ${time} ms`)
+					})
+				}
+			}
+
 			const parseJson = (res) => {
 				if (res.ok) {
 					return res.json().catch(e => {
@@ -39,19 +66,7 @@
 			}
 
 			// change this
-			const request = function (method, url, body = {}) {
-				if (method !== "GET") {
-					return fetch(url, {
-						method: method,
-						headers: {
-							"Content-Type": "application/json; charset=utf-8",
-						},
-						body: JSON.stringify(body),
-					}).then(parseJson)
-				} else {
-					return fetch(url).then(parseJson)
-				}
-			}
+			const request = requestUtil
 
 			// #1 GET 2xx
 			// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
