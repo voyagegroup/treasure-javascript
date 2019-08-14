@@ -28,30 +28,56 @@
         }`
       }
 
-      const promise = new Promise(function(resolve, reject) {
-        setTimeout(resolve, 2000, 'TimeOut')
-      })
+      const promise = (time, text) =>
+        new Promise(function(resolve, reject) {
+          setTimeout(resolve, time, text)
+        })
 
       // change this
       const request = function(method, url) {
         return Promise.race([
-          fetch(url)
+          fetch(url, { method: method })
             .then(res => {
               if (res.ok) {
-                return fetch(res.url)
+                console.log(res)
+                return res
               }
               throw new Error(res)
             })
             .then(res => res.text())
             .then(text => {
               try {
+                console.log('json')
                 return JSON.parse(text)
               } catch (e) {
-                new DOMParser().parseFromString(text, 'text/html')
+                console.log('catch')
+                throw new Error('Failed to parse')
               }
             }),
-          promise
+          promise(5000, 'request time out')
         ])
+      }
+
+      const retryFunc = (method, url) => {
+        let flg = false
+        const ref = (method, url) =>
+          request(method, url)
+            .then(res => {
+              flg = true
+              return res
+            })
+            .catch(e => {
+              if (!flg) {
+                return ref(method, url)
+              }
+            })
+
+        return ref(method, url)
+      }
+
+      const requestWithTimeout = time => {
+        return (method, url) =>
+          Promise.race([retryFunc(method, url), promise(time, 'with timeout')])
       }
 
       // #1 GET 2xx
@@ -70,18 +96,28 @@
       //     .catch(errorHandler)
 
       // #4 GET 2xx but not json
-      request('GET', 'http://localhost:3001/index.html')
-        .then(successHandler)
-        .catch(errorHandler)
+      //   request('GET', 'http://localhost:3001/index.html')
+      //     .then(successHandler)
+      //     .catch(errorHandler)
 
-      // #5 PUT
-      // request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
+      //   #5 PUT
+      //   request('PUT', 'http://localhost:3001/posts/1', {
+      //     id: 1,
+      //     title: 'treasure',
+      //     author: '{{CHANGE YOUR NAME}}'
+      //   })
+      //     .then(successHandler)
+      //     .catch(errorHandler)
 
-      // #6 GET /timeout with Timeout
-      // requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+      //   #6 GET /timeout with Timeout
+      //   requestWithTimeout(2000)('GET', 'http://localhost:3001/timeout')
+      //     .then(successHandler)
+      //     .catch(errorHandler)
 
       // #7 GET /retryme until success
-      // requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+      //   requestWithTimeout(2000)('GET', 'http://localhost:3001/retryme')
+      //     .then(successHandler)
+      //     .catch(errorHandler)
 
       // #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
     </script>
