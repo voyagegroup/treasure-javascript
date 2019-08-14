@@ -15,19 +15,22 @@
 	<script type="text/javascript">
 	const successHandler = function(text) {
 		document.getElementById("success").textContent = JSON.stringify(text);
-	}
+	};
 	const errorHandler = function(error) {
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
-	}
+	};
 
+
+	const parseJSON = res => res.json();
 	// change this
+	
 	const request = function(method, url) {
-		return fetch(url)
-	}
+		return fetch(url).then(parseJSON)
+	};
 
 	// #1 GET 2xx
-	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
-
+	request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+	//
 	// #2 GET 4xx
 	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
