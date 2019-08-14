@@ -28,6 +28,9 @@
 	const request = function(method, url, body) {
 		return fetch(url, {
 			method: method,
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify(body),
 		}).then((res) => {
 			if (res.ok) {
@@ -39,8 +42,26 @@
 		});
 	}
 
+	const requestWithTimeout = function(time) {
+		let retryCount = 0
+		const retryLimit = 10
+		const request = function(method, url) {
+			 return Promise.race([
+				request(method, url),
+				new Promise(function(resolve, reject) {
+					setTimeout(function() {
+						reject(new Error("Timeout"))
+					}, 2000)
+				}),
+			])
+		}
+		return request.catch(() => {
+			request(method, url)
+		})
+	}
+
 	// #1 GET 2xx
-	request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
 	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
@@ -58,7 +79,7 @@
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+	requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
 
