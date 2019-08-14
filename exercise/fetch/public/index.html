@@ -14,7 +14,6 @@
 
 	<script type="text/javascript">
 	const successHandler = function(text) {
-    console.log(text)
 		document.getElementById("success").textContent = JSON.stringify(text);
 	}
 	const errorHandler = function(error) {
@@ -24,13 +23,13 @@
   const throwError = (res) => {
     console.log(res)
     if(res.ok === false) {
-      if (res.status === 404) {
-        throw new Error("404!!")
+      switch(res.status) {
+        case 404:
+          throw new Error("404!!")
+        case 500:
+          throw new Error("500!!")
       }
-      if (res.status === 500) {
-        throw new Error("500!!")
-      }
-        throw new Error("なんか失敗したわ")
+      throw new Error("なんか失敗したわ")
     }
 
     return res
@@ -43,7 +42,7 @@
   }
 
   const set_timeout = (time) => {
-    return new Promise((_, reject) => setTimeout(() => reject(new Error("hogehoge")), time))
+    return new Promise((_, reject) => setTimeout(() => reject(new Error("タイムアウト")), time))
   }
 
   const requestWithTimeout = (timeout) => {
