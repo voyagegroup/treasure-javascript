@@ -1,5 +1,4 @@
 const jsonServer = require('json-server')
-const sleep = require('sleep')
 
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
@@ -18,6 +17,7 @@ server.get('/timeout', async (req, res) => {
 })
 
 // Add custom routes before JSON Server router
+
 server.get('/retryme', (req, res) => {
   if (Math.random() < 0.2) {
    res.status(200).jsonp({
