@@ -25,17 +25,23 @@
 		// change this
 		const request = function (method, url) {
 			return fetch(url).then((res) => {
-				switch (true) {
-					case res.ok === true:
-						return res.json().catch((error) => {
-							return res
-						})
-					case 400 <= res.status < 500:
-						throw new Error(res.status + " error")
-					case 500 <= res.status < 600:
-						throw new Error(res.status + " error")
+				if (res.ok) {
+					return res.json().catch((e) => {
+						throw new Error("not json")
+					})
+				} else {
+					throw new Error(res.status + " error")
 				}
 			})
+		}
+
+		let IsJSON = (str) => {
+			try {
+				JSON.parse(str)
+			} catch (e) {
+				return false
+			}
+			return true
 		}
 
 		// #1 GET 2xx
