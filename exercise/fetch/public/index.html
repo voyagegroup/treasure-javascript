@@ -27,6 +27,22 @@
           error.message
         }`
       }
+      const statuCodeHandler = res => {
+        if (res.ok) {
+          console.log(res)
+          return res
+        }
+        throw new Error(res)
+      }
+      const parseJSON = text => {
+        try {
+          console.log('json')
+          return JSON.parse(text)
+        } catch (e) {
+          console.log('catch')
+          throw new Error('Failed to parse')
+        }
+      }
 
       const promise = (time, text) =>
         new Promise(function(resolve, reject) {
@@ -37,23 +53,9 @@
       const request = function(method, url) {
         return Promise.race([
           fetch(url, { method: method })
-            .then(res => {
-              if (res.ok) {
-                console.log(res)
-                return res
-              }
-              throw new Error(res)
-            })
+            .then(statuCodeHandler)
             .then(res => res.text())
-            .then(text => {
-              try {
-                console.log('json')
-                return JSON.parse(text)
-              } catch (e) {
-                console.log('catch')
-                throw new Error('Failed to parse')
-              }
-            }),
+            .then(parseJSON),
           promise(5000, 'request time out')
         ])
       }
@@ -81,14 +83,14 @@
       }
 
       // #1 GET 2xx
-      //   request('GET', 'http://localhost:3001/posts')
-      //     .then(successHandler)
-      //     .catch(errorHandler)
+      request('GET', 'http://localhost:3001/posts')
+        .then(successHandler)
+        .catch(errorHandler)
 
       // #2 GET 4xx
-      //   request('GET', 'http://localhost:3001/404')
-      //     .then(successHandler)
-      //     .catch(errorHandler)
+      request('GET', 'http://localhost:3001/404')
+        .then(successHandler)
+        .catch(errorHandler)
 
       // #3 GET 5xx
       //   request('GET', 'http://localhost:3001/timeout')
@@ -120,21 +122,21 @@
       //     .catch(errorHandler)
 
       // #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
-      const f8 = () => {
-        const list = [
-          { method: 'GET', url: 'http://localhost:3001/posts/1' },
-          { method: 'GET', url: 'http://localhost:3001/comments?post_id=1' }
-        ]
-        const promises = list.map(x => {
-          return request(x.method, x.url)
-            .then(text => text)
-            .catch(err => err)
-        })
-        Promise.all(promises)
-          .then(text => successHandler(text))
-          .catch(err => errorHandler(err))
-      }
-      f8()
+      // const f8 = () => {
+      //   const list = [
+      //     { method: 'GET', url: 'http://localhost:3001/posts/1' },
+      //     { method: 'GET', url: 'http://localhost:3001/comments?post_id=1' }
+      //   ]
+      //   const promises = list.map(x => {
+      //     return request(x.method, x.url)
+      //       .then(text => text)
+      //       .catch(err => err)
+      //   })
+      //   Promise.all(promises)
+      //     .then(text => successHandler(text))
+      //     .catch(err => errorHandler(err))
+      // }
+      // f8()
     </script>
   </body>
 </html>
