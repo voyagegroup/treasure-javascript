@@ -20,11 +20,13 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
+	function parseJson(res) {
+		return res.json();
+	}
+
 	// change this
 	const request = function(method, url) {
-		return fetch(url).then(function(res){
-			return res.json();
-		})
+		return fetch(url).then(parseJson)
 	}
 
 	// #1 GET 2xx
