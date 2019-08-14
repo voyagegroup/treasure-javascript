@@ -23,22 +23,25 @@
 	// change this
 	const request = function(method, url) {
 		return fetch(url).then((res)=>{
-			if(res.ok===true){
-			return res.json()
-			}else{
-				throw new Error("4xx error.")
+			switch(true){
+				case res.ok===true:
+					return res.json()
+				case 400<=res.status<500:
+					throw new Error(res.status+" error")
+				case 500<=res.status<600:
+					throw new Error(res.status+" error")
 			}
 		})
 	}
 
 	// #1 GET 2xx
-	request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
-	request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
