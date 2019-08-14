@@ -20,9 +20,42 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
+	let count = 1;
+
 	// change this
-	const request = function(method, url) {
-		return fetch(url)
+	const request = function(method, url, body=null) {
+		return fetch(url,{method, body}).then(response => {
+			if (response.ok) {
+				return response.json()
+			} else {
+				if (count === 5) {
+					throw new Error('Response invalid');
+				} else {
+					count += 1
+					return request(method, url);
+				}
+			}
+		})
+	}
+
+	const requestWithTimeout = function(time) {
+		return function(method, url) {
+			return Promise.race([timeout(time), request(method, url)])
+		}
+	}
+
+	const timeout = function(time) {
+		return new Promise(function(resolve, reject) { 
+			setTimeout(() => reject(new Error('timeout だよ')), time); 
+		});
+	}
+
+	const getPost = function(array) {
+		return Promise.all([requestWithTimeout(2000)("GET", array[0]), requestWithTimeout(2000)("GET", array[1])])
+			.then((values) => {
+				values[0].comments = values[1]
+				return values[0]
+			})
 	}
 
 	// #1 GET 2xx
@@ -38,15 +71,16 @@
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
 
 	// #5 PUT
-	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
+	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "yutaro" }).then(successHandler).catch(errorHandler)
 
 	// #6 GET /timeout with Timeout
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	//requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
+	// getPost(['http://localhost:3001/posts/1', 'http://localhost:3001/comments?post_id=1']).then(successHandler).catch(errorHandler)
 
 	</script>
 </body>
