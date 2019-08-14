@@ -22,13 +22,15 @@
 
 	// change this
 	const request = function(method, url, body=null) {
+		let count = 0;
 		return fetch(url,{method, body}).then(response => {
 			if (response.ok) {
 				return response.json()
 			} else {
-				if (response.status !== 503) {
+				if (response.status !== 503 || count >= 5) {
 					throw new Error('Response invalid');
 				} else {
+					count += 1;
 					return request(method, url);
 				}
 			}
