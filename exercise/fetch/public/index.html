@@ -24,11 +24,11 @@
 				document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 			}
 
-			class NotFoundError extends Error {}
-
 			const parseJson = (res) => {
 				if (res.ok) {
-					return res.json()
+					return res.json().catch(e => {
+						throw new Error("It is not json")
+					})
 				} else {
 					if (res.status === 404) {
 						throw new Error("404 Not Found")
@@ -56,7 +56,7 @@
 			// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 			// #3 GET 5xx
-			request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+			// request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 			// #4 GET 2xx but not json
 			// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
