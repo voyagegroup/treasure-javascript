@@ -1,5 +1,4 @@
 const jsonServer = require('json-server')
-//const sleep = require('sleep')
 
 const server = jsonServer.create()
 const router = jsonServer.router('db.json')
@@ -9,13 +8,13 @@ const port = 3001
 server.use(middlewares)
 
 // Add custom routes before JSON Server router
-//server.get('/timeout', async (req, res) => {
-	//const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
-//	await sleep(10000)
-//    res.status(504).jsonp({
-//    	error: "Gateway Timeout"
-//  	})
-//})
+server.get('/timeout', async (req, res) => {
+	const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
+	await sleep(10000)
+   res.status(504).jsonp({
+   	error: "Gateway Timeout"
+ 	})
+})
 
 // Add custom routes before JSON Server router
 
@@ -25,7 +24,7 @@ server.get('/retryme', (req, res) => {
     	message: "Nice try. You are lucky!"
     });
   } else {
-  	res.status(500).jsonp({
+  	res.header("Retry-After", 5).status(503).jsonp({
     	error: "Server Internal Error. Please retry again."
   	});
   }
