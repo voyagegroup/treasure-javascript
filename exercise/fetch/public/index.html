@@ -20,6 +20,8 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
+  class RetryError extends Error{}
+
   const throwError = (res) => {
     if(res.ok === false) {
       switch(res.status) {
@@ -27,6 +29,8 @@
           throw new Error("404!!")
         case 500:
           throw new Error("500!!")
+        case 503:
+          throw new RetryError()
       }
       throw new Error("なんか失敗したわ")
     }
@@ -59,6 +63,9 @@
       .then(throwError)
       .then(parseResponse)
       .catch((e) => {
+        if(e instanceof RetryError) {
+          return request(method, url)
+        }
         throw new Error(`failed fetch. url: ${url}, method: ${method}, detail: ${e.message}`)
       })
   }
