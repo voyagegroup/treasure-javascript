@@ -44,12 +44,11 @@
 
 			const generateRequestsUtil = (requestStrings) => {
 				let requests = []
-				requestStrings.forEach(requestString => {
+				return requestStrings.map(requestString => {
 					method = requestString.split(" ")[0]
 					url = requestString.split(" ")[1]
-					requests.push(requestUtil(method, url))
+					return requestUtil(method, url)
 				});
-				return requests
 			}
 
 			const requestWithTimeout = (time) => {
