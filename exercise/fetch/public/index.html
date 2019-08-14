@@ -16,11 +16,9 @@
 
 		<script type="text/javascript">
 			const successHandler = function (text) {
-				console.debug("success")
 				document.getElementById("success").textContent = JSON.stringify(text);
 			}
 			const errorHandler = function (error) {
-				console.debug("failure")
 				document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 			}
 
@@ -42,8 +40,14 @@
 
 			// change this
 			const request = function (method, url, body = {}) {
-				if (method === "PUT") {
-					return fetch(method, url, body).then(parseJson)
+				if (method !== "GET") {
+					return fetch(url, {
+						method: method,
+						headers: {
+							"Content-Type": "application/json; charset=utf-8",
+						},
+						body: JSON.stringify(body),
+					}).then(parseJson)
 				} else {
 					return fetch(url).then(parseJson)
 				}
