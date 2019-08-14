@@ -50,6 +50,23 @@
 			}
 		}
 
+		let requestWithTimeout = () => {
+			return f = (method, url, body = {
+				const request = request(method, url, body)
+			})
+		}
+
+		let debounce = (func, time) => {
+			let timeout;
+
+			return function () {
+				const functionCall = () => func.apply(this, arguments);
+
+				clearTimeout(timeout);
+				timeout = setTimeout(functionCall, time);
+			}
+		}
+
 		// #1 GET 2xx
 		// request('GET', 'http://localhost:3001/posts').then(successHandler).catch(errorHandler)
 
@@ -63,12 +80,12 @@
 		// request('GET', 'http://localhost:3001/index.html').then(successHandler).catch(errorHandler)
 
 		// #5 PUT
-		request('PUT', 'http://localhost:3001/posts/1', { 'id': 1, 'title': 'treasure', 'author': 'terfno' }).then(successHandler).catch(errorHandler)
+		// request('PUT', 'http://localhost:3001/posts/1', { 'id': 1, 'title': 'treasure', 'author': 'terfno' }).then(successHandler).catch(errorHandler)
 
-		request('GET', 'http://localhost:3001/posts/1').then(successHandler).catch(errorHandler)
+		// request('GET', 'http://localhost:3001/posts/1').then(successHandler).catch(errorHandler)
 
 		// #6 GET /timeout with Timeout
-		// requestWithTimeout(2000)('GET', 'http://localhost:3001/timeout').then(successHandler).catch(errorHandler)
+		requestWithTimeout(2000)('GET', 'http://localhost:3001/timeout').then(successHandler).catch(errorHandler)
 
 		// #7 GET /retryme until success
 		// requestWithTimeout(2000)('GET', 'http://localhost:3001/retryme').then(successHandler).catch(errorHandler)
