@@ -41,6 +41,17 @@
 					setTimeout(reject, time);
 				});
 			}
+
+			const generateRequestsUtil = (requestStrings) => {
+				let requests = []
+				requestStrings.forEach(requestString => {
+					method = requestString.split(" ")[0]
+					url = requestString.split(" ")[1]
+					requests.push(requestUtil(method, url))
+				});
+				return requests
+			}
+
 			const requestWithTimeout = (time) => {
 				return function (method, url, body = {}) {
 					return Promise.race([requestUtil(method, url, body), timeOutUtil(time)]).catch(e => {
@@ -51,6 +62,13 @@
 						}
 					})
 				}
+			}
+
+			const requestAll = (requests) => {
+				return Promise.all([...requests])
+					.catch(e => {
+						throw new Error(`error request!!`)
+					})
 			}
 
 			class CanRetryError extends Error {}
@@ -101,6 +119,10 @@
 			// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 			// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id= 1]
+			// 自作関数創りました
+			// requestAll(generateRequestsUtil(["GET http://localhost:3001/posts/1",
+			// 	"GET http://localhost:3001/comments?post_id= 1"
+			// ])).then(successHandler).catch(errorHandler)
 		</script>
 	</body>
 
