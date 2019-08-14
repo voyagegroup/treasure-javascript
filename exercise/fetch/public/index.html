@@ -1,100 +1,109 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Index</title>
-</head>
-<body>
-	<h1>Let's fetch</h1>
+  <head>
+    <title>Index</title>
+  </head>
+  <body>
+    <h1>Let's fetch</h1>
 
-	<h3>#1 Success</h3>
-	<textarea rows="10" cols="60" id="success" disabled></textarea>
+    <h3>#1 Success</h3>
+    <textarea rows="10" cols="60" id="success" disabled></textarea>
 
-	<h3>#2 Error</h3>
-	<textarea rows="10" cols="60" id="error" style="color:red" disabled></textarea>
+    <h3>#2 Error</h3>
+    <textarea
+      rows="10"
+      cols="60"
+      id="error"
+      style="color:red"
+      disabled
+    ></textarea>
 
-	<script type="text/javascript">
-	const successHandler = function(text) {
-		document.getElementById("success").textContent = JSON.stringify(text);
-	}
-	const errorHandler = function(error) {
-		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
-	}
+    <script type="text/javascript">
+      const successHandler = function(text) {
+        document.getElementById("success").textContent = JSON.stringify(text);
+      };
+      const errorHandler = function(error) {
+        document.getElementById("error").textContent = `${error.name}: ${
+          error.message
+        }`;
+      };
 
-  class RetryError extends Error{}
+      class RetryError extends Error {}
 
-  const throwError = (res) => {
-    if(res.ok === false) {
-      switch(res.status) {
-        case 404:
-          throw new Error("404!!")
-        case 500:
-          throw new Error("500!!")
-        case 503:
-          throw new RetryError()
-      }
-      throw new Error("なんか失敗したわ")
-    }
-
-    return res
-  }
-
-  const parseResponse = (res) =>
-    res.json().catch((e) =>{
-      throw new Error("jsonパースできんかった、、、ごめん")
-    })
-
-  const set_timeout = (time) => new Promise((_, reject) => setTimeout(() => reject(new Error("タイムアウト")), time))
-
-  const requestWithTimeout = (timeout) =>
-    (method, url) => (
-      Promise.race([
-        set_timeout(timeout),
-        request(method, url)
-      ])
-    )
-
-	// change this
-	const request = function(method, url) {
-    return fetch(url, { method: method })
-      .then(throwError)
-      .then(parseResponse)
-      .catch((e) => {
-        if(e instanceof RetryError) {
-          return request(method, url)
+      const throwError = res => {
+        if (res.ok === false) {
+          switch (res.status) {
+            case 404:
+              throw new Error("404!!");
+            case 500:
+              throw new Error("500!!");
+            case 503:
+              throw new RetryError();
+          }
+          throw new Error("なんか失敗したわ");
         }
-        throw new Error(`failed fetch. url: ${url}, method: ${method}, detail: ${e.message}`)
-      })
-  }
 
-  const requestAll = (requests) =>
-    Promise.all(requests)
-      .then(successHandler)
-      .catch(errorHandler)
+        return res;
+      };
 
-	// #1 GET 2xx
-  // request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+      const parseResponse = res =>
+        res.json().catch(e => {
+          throw new Error("jsonパースできんかった、、、ごめん");
+        });
 
-	// #2 GET 4xx
-	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
+      const set_timeout = time =>
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("タイムアウト")), time)
+        );
 
-	// #3 GET 5xx
-	// request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+      const requestWithTimeout = timeout => (method, url) =>
+        Promise.race([set_timeout(timeout), request(method, url)]);
 
-	// #4 GET 2xx but not json
-	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
+      // change this
+      const request = function(method, url) {
+        return fetch(url, { method: method })
+          .then(throwError)
+          .then(parseResponse)
+          .catch(e => {
+            if (e instanceof RetryError) {
+              return request(method, url);
+            }
+            throw new Error(
+              `failed fetch. url: ${url}, method: ${method}, detail: ${
+                e.message
+              }`
+            );
+          });
+      };
 
-	// #5 PUT
-	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
+      const requestAll = requests =>
+        Promise.all(requests)
+          .then(successHandler)
+          .catch(errorHandler);
 
-	// #6 GET /timeout with Timeout
-	requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+      // #1 GET 2xx
+      // request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
-	// #7 GET /retryme until success
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+      // #2 GET 4xx
+      // request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
-	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
-  // requestAll([request("GET", "http://localhost:3001/posts/1"), request("GET", "http://localhost:3001/comments?post_id=1")])
+      // #3 GET 5xx
+      // request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
-	</script>
-</body>
+      // #4 GET 2xx but not json
+      // request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
+
+      // #5 PUT
+      // request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
+
+      // #6 GET /timeout with Timeout
+      // requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+
+      // #7 GET /retryme until success
+      // requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+
+      // #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
+      // requestAll([request("GET", "http://localhost:3001/posts/1"), request("GET", "http://localhost:3001/comments?post_id=1")])
+    </script>
+  </body>
 </html>
