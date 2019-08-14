@@ -24,7 +24,7 @@ server.get('/retryme', (req, res) => {
     	message: "Nice try. You are lucky!"
     });
   } else {
-  	res.status(500).jsonp({
+    res.header("Retry-After", 5).status(503).jsonp({
     	error: "Server Internal Error. Please retry again."
   	});
   }

@@ -20,25 +20,78 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
+  const parseJson = res => {
+    return res.text().then(res => {
+      try {
+        return JSON.parse(res)
+      } catch(e) {
+        throw new Error("Parse error occured")
+      }
+    })
+  }
+
+  const IntervalFetch = (method, url) => {
+    //use setInterval
+  }
+
+  const clearInterval = (method, url) => {
+    //use clearInterval
+  }
+
+  const getRequestResult = (url) => {
+    return fetch(url).then(res => {
+      if (res.ok) {
+        return parseJson(res).then(res => res)
+      }
+      if (res.status >= 405) {
+        throw new Error('5xx error')
+      }
+      throw new Error('4xx error')
+    })
+  }
+
+  const putRequestResult = (url) => {
+    return fetch(url, {method: 'PUT'}).then(res => {
+      if (res.ok) {
+        return parseJson(res).then(res => res)
+      }
+      if (res.status >= 405) {
+        throw new Error('5xx error')
+      }
+      throw new Error('4xx error')
+    })
+  }
+
+  const postRequestResult = () {
+  }
+
+
 	// change this
 	const request = function(method, url) {
-		return fetch(url)
+    switch(method) {
+      case 'PUT':
+        return putRequestResult(url).then(res => res)
+      case 'GET':
+        return getRequestResult(url).then(res => res)
+      case 'POST':
+        return getRequestResult(url).then(res => res)
+    }
 	}
 
 	// #1 GET 2xx
-	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+  // request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
 	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
 
 	// #5 PUT
-	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
+	request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
 
 	// #6 GET /timeout with Timeout
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
