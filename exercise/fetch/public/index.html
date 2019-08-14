@@ -44,11 +44,16 @@
 			const requestWithTimeout = (time) => {
 				return function (method, url, body = {}) {
 					return Promise.race([requestUtil(method, url, body), timeOutUtil(time)]).catch(e => {
-						throw new Error(`timeout error for ${time} ms`)
+						if (e.constructor === CanRetryError) {
+							return requestWithTimeout(time)(method, url, body = {})
+						} else {
+							throw new Error(`timeout error for ${time} ms`)
+						}
 					})
 				}
 			}
 
+			class CanRetryError extends Error {}
 			const parseJson = (res) => {
 				if (res.ok) {
 					return res.json().catch(e => {
@@ -59,6 +64,8 @@
 						throw new Error("404 Not Found")
 					} else if (res.status === 504) {
 						throw new Error("504 Timeout")
+					} else if (res.status === 503) {
+						throw new CanRetryError("503 can retry!")
 					} else {
 						throw new Error("Internal Server Error")
 					}
