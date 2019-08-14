@@ -20,11 +20,15 @@
 		document.getElementById("error").textContent += `${error.name}: ${error.message}`;
 	}
 
+        class RetryError extends Error{}
+
         const statusHandler = function(response) {
           if(!response.ok){
             switch (true) {
               case /4../.test(response.status):
                 throw Error(response.status + ": not Found\n")
+              case /503/.test(response.status):
+                throw RetryError(response.status + ": retry\n")
               case /5../.test(response.status):
                 throw Error(response.status + ": Timeout\n")
               default:
@@ -60,9 +64,18 @@
         const requestWithTimeout = function(duration) {
           return function(method, url, body={}, headers={}) {
             return Promise.race([request(method, url, body, headers), timeoutPromise(duration)]).catch(function(value) {
+              if (value.constructor === RetryError) {
+                return requestWithTimeout(duration)(method, url, body, headers)
+              }
               throw Error(value)
             })
           }
+        }
+
+        const requestAll = function(requestInfos) {
+          Promise.all(requestInfos.map(info => 
+            requestWithTimeout(2000)(info.method, info.url, info.body, info.headers).then(successHandler).catch(errorHandler)
+          ))
         }
 
 	// #1 GET 2xx
@@ -87,6 +100,12 @@
 	requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
+        
+        requestList = [ 
+          { "url": "http://localhost:3001/posts/1", "methodl": "GET"},
+          { "url": "http://localhost:3001/comments?post_id=1", "method": "GET"},
+        ]
+        requestAll(requestList)
 
 	</script>
 </body>
