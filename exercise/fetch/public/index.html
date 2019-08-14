@@ -17,7 +17,7 @@
 		document.getElementById("success").textContent = JSON.stringify(text);
 	};
 	const errorHandler = function(error) {
-		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
+		document.getElementById("error").textContent += `${error.name}: ${error.message}` + "\n";
 	};
 
 
@@ -29,7 +29,11 @@
 			if (res.ok) {
 				return parseJSON(res)
 			}
-			throw new Error("4xx Error");
+			console.log(res);
+			if (400 <= res.status && res.status < 500) {
+				throw new Error("4xx Error");
+			}
+			throw new Error("5xx Error");
 		})
 	};
 
@@ -40,7 +44,7 @@
 	request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler);
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
