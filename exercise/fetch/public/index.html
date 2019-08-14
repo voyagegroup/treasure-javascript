@@ -20,7 +20,6 @@
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
-	// change this
 	const request = function(method, url) {
 		if (method == "PUT") {
 			return fetch(url, {method: "PUT"}).then(function(res) {
