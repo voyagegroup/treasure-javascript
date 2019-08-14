@@ -88,6 +88,15 @@
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
+	Promise.all([request('GET', 'http://localhost:3001/posts/1'), request('GET', 'http://localhost:3001/comments?post_id=1')])
+		.then((res) => {
+			return Object.assign({
+				post: res[0],
+				comments: res[1]
+			})
+		})
+		.then(successHandler)
+		.catch(errorHandler);
 
 	</script>
 </body>
