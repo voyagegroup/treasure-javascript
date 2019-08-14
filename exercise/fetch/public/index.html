@@ -25,7 +25,8 @@
 	}
 
 	// change this
-	const request = function(method, url, body) {
+	const request = function(method, url, body, retryCount = 0) {
+		const retryLimit = 1
 		return fetch(url, {
 			method: method,
 			headers: {
@@ -34,18 +35,25 @@
 			body: JSON.stringify(body),
 		}).then((res) => {
 			if (res.ok) {
+				console.log('ok')
 				return parseJson(res).catch(() => {
 					throw(new Error("Response is not json"));
 				});
 			}
-			throw(new Error(res.statusText));
+			if (res.status === 503) {
+				if (retryCount < retryLimit) {
+					return request(method, url, body, retryCount + 1)
+				} else {
+					throw(new Error("Retry Limit"))
+				}
+			} else {
+				throw(new Error(res.statusText));
+			}
 		});
 	}
 
 	const requestWithTimeout = function(time) {
-		let retryCount = 0
-		const retryLimit = 10
-		const request = function(method, url) {
+		const res = function(method, url) {
 			 return Promise.race([
 				request(method, url),
 				new Promise(function(resolve, reject) {
@@ -55,9 +63,7 @@
 				}),
 			])
 		}
-		return request.catch(() => {
-			request(method, url)
-		})
+		return res
 	}
 
 	// #1 GET 2xx
@@ -79,7 +85,7 @@
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
-	requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
 
