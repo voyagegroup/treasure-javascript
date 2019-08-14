@@ -14,25 +14,52 @@
 
 	<script type="text/javascript">
 	const successHandler = function(text) {
+    console.log(text)
 		document.getElementById("success").textContent = JSON.stringify(text);
 	}
 	const errorHandler = function(error) {
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
 
+  const throwError = (res) => {
+    console.log(res)
+    if(res.ok === false) {
+      if (res.status === 404) {
+        throw new Error("404!!")
+      }
+      if (res.status === 500) {
+        throw new Error("500!!")
+      }
+        throw new Error("なんか失敗したわ")
+    }
+
+    return res
+  }
+
+  const parseResponse = (res) => {
+    return res.json().catch((e) =>{
+      throw new Error("jsonパースできんかった、、、ごめん")
+    })
+  }
+
 	// change this
 	const request = function(method, url) {
-		return fetch(url)
-	}
+    return fetch(url, { method: method })
+      .then(throwError)
+      .then(parseResponse)
+      .catch((e) => {
+        throw new Error(`failed fetch. url: ${url}, method: ${method}, detail: ${e}`)
+      })
+  }
 
 	// #1 GET 2xx
-	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
+  // request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
 	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
 
 	// #3 GET 5xx
-	//request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	// request("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #4 GET 2xx but not json
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
@@ -41,7 +68,7 @@
 	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
 
 	// #6 GET /timeout with Timeout
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
+	requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
