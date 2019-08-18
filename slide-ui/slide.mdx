@@ -1,0 +1,793 @@
+import * as all from "@mdx-deck/themes";
+import { Split, Image } from "mdx-deck";
+
+import TitlePage from "./Components/Title";
+
+export const themes = [all.aspect43, all.dark, all.dots, all.highlight, {
+  styles: {
+    root: {
+      textAlign: 'left',
+      fontSize: ['1.5em', null, '3em'],
+    },
+    Slide: {
+      display: 'block',
+      padding: '2em',
+      textAlign: 'left',
+    },
+  },
+}];
+
+<TitlePage>
+
+# Treasure 2019
+
+## フロントエンド編
+
+</TitlePage>
+
+---
+
+## はじめに
+
+- 今回紹介する選択肢はあくまでも一例
+- 取り上げたものを使わなきゃいけないわけではない
+
+---
+
+## この講義のゴール
+
+- JavaScript でフロントエンド開発出来るようになる
+- フロントエンド開発においての引出しを増やす
+
+<Notes>
+  *
+  フレームワークの選定に関しては、チーム規模だったり、プロダクトのフェーズによって考えることは違う
+  * ドキュメントとかモダンなJSでシュッと書けるようにとか
+</Notes>
+
+---
+
+## 自己紹介
+
+ここにいい感じの自己紹介
+
+---
+
+import ImgVSCode from "./resources/vscode.png";
+
+## 推奨エディタ
+
+<img
+  src={ImgVSCode}
+  style={{ objectFit: "contain", maxHeight: "60%", width: "100%" }}
+/>
+
+https://code.visualstudio.com
+
+---
+
+<TitlePage>
+
+# フロントエンド入門
+
+</TitlePage>
+
+---
+
+## フロントエンド
+
+Web の文脈でのフロントエンド
+
+- HTML
+- CSS
+- JavaScript
+
+<Notes>
+  CSSも奥が深いので触れた方が良さそうではあるが、今回はJavaScriptでWebアプリケーションを作ることを主眼にしているので、JavaScript中心で進める
+  ReactだとMaterial-UIとか、Vue.jsだったらVuetifyを使えばいい感じにMaterial-Designライクになるから、それでひとまずやってみよう
+</Notes>
+
+---
+
+## JavaScript
+
+- ブラウザで動作するプログラミング言語
+- HTML をよりインタラクティブにするために使われる
+- 非同期処理の実現にも使われる
+
+例: gist から非同期でデータを取得し View に表示
+
+https://jsfiddle.net/f3x5a8dy/4/
+
+---
+
+import ImgMDN from "./resources/MDN.png";
+
+## JavaScript で困ったら
+
+<img
+  src={ImgMDN}
+  style={{ objectFit: "contain", maxHeight: "50%", width: "100%" }}
+/>
+
+日本語翻訳もそこそこ進んでいる
+
+https://developer.mozilla.org/ja/
+
+---
+
+<TitlePage>
+
+# 少し前までのフロントエンド
+
+</TitlePage>
+
+---
+
+## フロントエンドの革命児 jQuery
+
+- 2006 年にリリース
+- ブラウザ非依存の DOM セレクタ　（`$(query)`）
+- 手軽にアニメーションを付けることが可能
+- 豊富なプラグイン
+- **手軽にクロスブラウザサポートが可能に**
+
+<Notes>
+  jQuery使われている例
+  https://voyagegroup.com/
+
+アニメーションとかも割と楽に加えられるし、ちょっと動いてくれるだけでいいんだよねみたいな場合に重宝
+多彩なプラグインを組み合わせることにより、リッチな UI が簡単に構築できる
+
+https://github.com/styopdev/multiPicker
+https://kenwheeler.github.io/slick/
+
+jQuery が優れていると言うよりは、jQuery が使われていた時期が長いから、こういうプラグインが充実したという方が正しいか
+
+</Notes>
+
+---
+
+## ブラウザの進化がもたらしたもの
+
+必須級の jQuery が少しずつ不要に…
+
+- ブラウザ非依存の DOM セレクタ
+
+=> `document.querySelectorAll` のような DOM API
+
+- 手軽にアニメーションを付けることが可能
+
+=> CSS3 の _Transition_ や _Animation_
+
+---
+
+<TitlePage>
+
+# 近年のフロントエンド
+
+</TitlePage>
+
+---
+
+## 開発のスタイルや関心事の変化
+
+- UI/UX の向上が大きな課題に
+  - ページスピード、レンダリング速度など
+- まだ残り続けるクロスブラウザ対応
+- DX を向上させる取り組み
+
+---
+
+## UX を損ねる DOM 操作
+
+- 一般的に重いと言われている DOM 操作
+- リストやテーブルを動的に何万件も作った日には……
+- DOM 操作をいかに減らしたり効率よく行うかが鍵
+
+---
+
+## ~~UX~~ DX を損ねる DOM 操作
+
+- 一般的に重いと言われている DOM 操作
+- リストやテーブルを動的に何万件も作った日には……
+- DOM 操作をいかに減らしたり効率よく行うかが鍵**だった**
+  - 現代のブラウザ（とマシン）だと割とどうにかなる節もある
+
+<Notes>
+  ここでデモかなぁ…ReactとJavaScriptの`appendChild`とかかな
+  Reactと同等ぐらいのことをやるなら自前で組み立ててinnerHTMLに投げ込むとか
+  Deverloper Toolsの見方とかも覚えてもらえれば
+</Notes>
+
+---
+
+## 仮想 DOM
+
+import ImgVirtualDOM from "./resources/virtual_dom.png";
+
+<img
+  src={ImgVirtualDOM}
+  style={{ objectFit: "contain", maxHeight: "70%", width: "100%" }}
+/>
+
+<figcaption style={{ fontSize: "12px" }}>
+  https://www.oreilly.com/library/view/learning-react-native/9781491929049/ch02.html
+  より引用
+</figcaption>
+
+<a href={'https://qiita.com/mizchi/items/4d25bc26def1719d52e6'}>なぜ仮想DOMという概念が俺達の魂を震えさせるのか - Qiita</a>
+
+<Notes>DOMツリーの実装と差分更新アルゴリズムの総称と言うのが正しいのか…</Notes>
+
+---
+
+## 仮想 DOM がもたらしたもの
+
+- DOM 操作を効率よくという DOM 差分計算機に自分がなる必要がない
+- 状態と対応する View に集中すればよい
+  - サーバーサイドでのテンプレートエンジンのようなイメージ
+
+---
+
+<TitlePage>
+
+## UI framework
+
+</TitlePage>
+
+---
+
+import ImgReact from "./resources/react-logo.svg";
+import ImgVuejs from "./resources/vuejs.png";
+
+## 事前課題で使われた UI framework
+
+<Split style={{ height: 'auto'}}>
+
+  <div style={{'minHeight': '100%'}}>
+    <img src={ImgReact} style={{height: '200px'}}/>
+
+    React
+
+  </div>
+
+  <div style={{'minHeight': '100%'}}>
+    <img src={ImgVuejs} style={{height: '200px'}}/>
+
+    Vue.js
+
+  </div>
+
+</Split>
+
+---
+
+## みんなの解答
+
+### why
+
+- 使ったことがある
+- チュートリアルがいい感じ、日本語Documentもある
+
+---
+
+### メリット
+
+- 仮想DOMでパフォーマンスが良い
+- コンポーネントでの再利用性・保守性
+- ドキュメントが充実
+
+### デメリット
+
+- 動かすのに必要モジュールが多い
+- コンポーネントの設計によっては保守性が落ちる
+
+---
+
+## みんなの解答（React.js）
+
+### メリット
+
+- ReactNativeあるからモバイル展開も
+- JSXでHTMLっぽく書ける
+- パッケージが充実
+- Facebookが開発元のためサポートの信頼性
+
+---
+
+## みんなの解答（React.js）
+
+### デメリット
+
+- jQueryとの併用が良くない（メリットかも）
+- バージョンによって書き方やベストプラクティスが変わりやすい
+- Babel, Webpackみたいなビルド周りの知識が必要
+- Reduxみたいな状態管理を入れ始めるとファイル数が膨大に
+- 非同期処理めんどくさい印象
+- 学習コストが高い（初心者がとっつきづらい）
+- SEOやOGP（SPAの話かな？）
+
+---
+
+## みんなの解答（Vue.js）
+
+### メリット
+
+- 双方向バインディングで監視系の処理を細かく書かずに良い
+- 他のフレームワークより簡単
+- ドキュメント豊富
+- HTML、CSS、JSを同一ファイルでありながら分割して書ける
+- 繰り返しとかEventListenerが簡潔に書ける
+- 学習コストが低い
+
+---
+
+## みんなの解答（Vue.js）
+
+### デメリット
+
+- Reactと比較してライブラリが少ない
+- 単一コンポーネントファイル(.vue)で書こうとするとそれ単体で動かない
+  - 簡単なアプリでもビルドが必要に
+
+<Notes>
+  https://www.npmjs.com/search?q=vue
+  https://www.npmjs.com/search?q=react
+  https://github.com/facebook/react/network/dependents
+  https://github.com/vuejs/vue/network/dependents
+
+  https://jp.vuejs.org/v2/guide/installation.html
+</Notes>
+
+---
+
+## 調べてみるとまだまだ出てくる
+
+- Vue.js
+- Angular
+- React
+- Riot.js
+- Elm
+- lit-html
+- ...
+
+---
+
+## Angularの採用例
+
+株式会社ゴールドスポットメディア
+
+https://corp.fluct.jp/service/publisher/goldspot/
+
+- クリエイティブを扱う会社でデザインにこだわっている 
+
+---
+
+### What Angular
+
+- v1扱いのAngularJSは2012年にリリースされた
+- 一般的に使われているAngularと呼ばれるものはv2以降のもの
+- Googleがメインメンテナー
+- TypeScriptで開発することが推奨されているフレームワーク
+
+https://angular.io
+
+---
+
+### メリット
+- ビルドツールやRouter、Test関係、HTTPヘルパのAll-in-Oneフレームワーク
+- 今は色んなフレームワークにもあるけど、便利なCLIがある
+- `@Component`みたいな便利アノテーションがあって、記述量を減らせる
+- テンプレートが完全なHTMLだからデザイナーと同じチームで作業がしやすい
+- TypeScriptで開発するのが標準
+
+---
+
+### デメリット
+
+- コードが少ない === Magic!
+- All-in-OneパッケージなのでBundleサイズが大きくなりがち
+- 人気がない
+
+<Notes>
+  https://www.npmtrends.com/@angular/core-vs-angular-vs-react-vs-vue
+</Notes>
+
+---
+
+## lit-htmlの採用例
+
+株式会社VOYAGE Lighthouse Studio
+
+https://kamigame.jp
+
+- 月間9000万PVを誇る大手サイト
+- ページレンダリングが非常に高速
+
+---
+
+### フレームワークの選定
+
+- 競合が多いサービスのため、いち早くIndexされるのが重要
+- SEO対策が重要になってくるため、First meaningful paintをJSのフレームワークを前提にしたくない
+- 基本的には静的コンテンツだが、動的に変更するのも行うため、生DOMを極力触りたくない
+- Hostingしているコンテンツサーバのお金も節約したい
+
+<Notes>
+  https://developers.google.com/web/tools/lighthouse/
+</Notes>
+
+---
+
+### What lit-html
+
+- 軽量HTMLテンプレートライブラリ
+- Serverサイド実装もありSSRにも対応
+- VirtualDOMライクなことを行える
+
+https://lit-html.polymer-project.org
+
+---
+
+### メリット
+
+- 単純な文字列結合を行うような実装のため、SSRにjsdomとかheadless-chromeみたいなのが必要ない
+  - CPUもパフォーマンスを求められない
+- 薄いライブラリであるため、他のRoutingライブラリやFluxの実装と組み合わせやすい
+
+---
+
+### デメリット
+
+- ドマイナー
+- ドキュメントがあまり整備されていなくて、リポジトリがドキュメントになっている
+
+---
+
+## いつでも XXX が最適解？
+
+- プロダクト
+  - 性質
+  - ニーズ
+  - フェーズ
+- チーム体制
+
+採用する技術は**時と場合**による
+
+---
+
+<TitlePage>
+
+## ビルド
+
+</TitlePage>
+
+---
+
+## why ビルド
+
+- どんどん便利なライブラリ足していきたくなる
+- コードの見通しよくするためにモジュールごとに分割したくなる
+- script タグの順番をマネージメントするのは現実的に不可能
+- ブラウザで扱えない JS もたくさんある
+
+---
+
+## Babel
+
+- 次世代の JavaScript をブラウザで動くように変換
+  - React で頻出する Rest Parameters は IE11 非対応…
+  - https://caniuse.com/
+- クロスブラウザ対応にも便利
+
+https://babeljs.io
+
+---
+
+## Webpack
+
+- モジュールやファイルの依存を解決してまとめる
+- 難読化や Minify も行える
+- プラグイン豊富で何でも出来る、出来てしまう
+
+https://webpack.js.org
+
+---
+
+## Parcel
+
+**驚くほど速く、設定不要な Web アプリケーションバンドラー**
+
+- 変換、依存解決、バンドルまで全部やる
+- Config を書かせない => 複雑なことをさせない
+  - Webpack と真逆の立ち位置
+  - Webpack と比べると出来ないことも出てくる
+
+https://parceljs.org
+
+---
+
+## フレームワーク  と密な便利（創味のつゆ）CLI
+
+React: create-react-app
+
+- https://github.com/facebook/create-react-app
+
+Vue.js: Vue CLI
+
+- https://cli.vuejs.org
+
+<div style={{ position: 'absolute', top: '80%' }}>
+
+<p style={{ 'fontSize': 'smaller'}}>創味のつゆの出典: <a href={'https://speakerdeck.com/takeru0757/simple-is-not-easy'}>https://speakerdeck.com/takeru0757/simple-is-not-easy</a></p>
+
+</div>
+
+---
+
+#### メリット
+
+- 対象のフレームワークで使うだろこれっていうのがいい感じに入る
+- 容易に Hello World 出来る
+- 動くものをまず提供するということに注力できる
+
+#### デメリット（？）
+
+- Webpack / Parcel と同じような構図
+  - ビルドをこだわりたくなったらきつい
+- CLI が勝手に入れたこのライブラリ、必要？の判断
+
+便利さを求めると何かしらのトレードオフは発生する
+
+<Notes>
+  事前課題でも core-js入ってたけど、なんでだっけ？みたいのがあった（実際polyfillのためなんだろうけど）
+  じゃあcore-jsをラップしてるBabel使ってる時点で今言ってることおかしくね感は…
+
+https://jp.vuejs.org/2018/08/11/vue-cli-3-0-is-here/
+Vue CLI 3.0 からイジェクトしなくても webpack いじれるようになったね
+
+create-react-app なら eject すればいいけど…
+最初のインストールを省きたいならありか…
+
+</Notes>
+
+---
+
+<!--
+<TitlePage>
+
+## テスト
+
+</TitlePage>
+
+---
+
+import ImgTWada from "./resources/twada.png";
+
+<Image src={ImgTWada} style={{ backgroundSize: "contain" }} />
+
+---
+
+2日目の話があるしスキップでいいかな
+
+---
+-->
+
+---
+
+<TitlePage>
+
+# n 分で理解する React / Vue.js 入門
+
+</TitlePage>
+
+---
+
+## props と state
+
+- props => 親コンポーネントから渡される**不変**なパラメータ
+- state => コンポーネント自身が管理している自身の状態
+
+<Notes>ここでちょこっと話し振ろうかな</Notes>
+
+---
+
+### props と state (React)
+
+<div style={{'fontSize': 'large'}}>
+
+```jsx
+class CommentInput extends React.Component {
+  constructor(props) {
+    // props
+    super(props);
+    this.state = { message: "" }; // state
+    this.handleFormInput = this.handleFormInput.bind(this);
+  }
+  handleFormInput(ev) {
+    this.setState({ message: ev.target.value });
+  }
+  render() {
+    return (
+      <form>
+        <span>Comemnt</span>
+        <input
+          value={this.state.message}
+          onChange={this.handleFormInput}
+          placeholder={this.props.placeholder}
+        />
+      </form>
+    );
+  }
+}
+```
+
+</div>
+
+---
+
+### props と state (Vue.js)
+
+<div style={{'fontSize': 'large'}}>
+
+```javascript
+Vue.component("comment-input", {
+  data: () => ({ message: "" }), // state
+  props: ["placeholder"], // props
+  template: `<form>
+  <span>Comemnt</span>
+  <input v-model="message" :placeholder="placeholder" />
+  </form>`
+});
+```
+
+</div>
+
+---
+
+## 2 つの種類の Component
+
+- Stateless Component
+  - React => Function
+  - Vue.js => data がない、`functional: true`,...
+- Statefull Component
+  - React => Class, Hooks
+  - Vue.js => data がある
+
+---
+
+### Stateless
+
+- state を持たない
+- 渡されたデータを元に View を作ることに専念出来る
+  - 依存するのは親からの props
+- View とロジックが分割されるから責務がハッキリする
+- testable
+
+---
+
+### Statefull
+
+- state を持つ
+- lifecycle を持つ
+
+---
+
+### lifecycle
+
+https://vuejs.org/v2/guide/instance.html
+
+https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class
+
+---
+
+### どっちを選ぶ？どう作る？State{less,full}
+
+case 1) 単純に一つのページに Article と ArticleComment 表示されている
+
+- Article は一つ、ArticleComment は複数
+
+---
+
+### どっちを選ぶ？どう作る？State{less,full}
+
+case 2) 単純に一つのページに Article と ArticleComment 表示されている
+
+- Article は一つ、ArticleComment は複数
+- そのページで ArticleComment の書き込みが出来る
+
+<Notes>
+  Article一覧ページみたいな例題も出そうと思ったけど、その場合ってそもそもRenderするLayoutが変わるからいい例題じゃないかもな…
+</Notes>
+
+---
+
+## Project のディレクトリ構成
+
+https://ja.reactjs.org/docs/faq-structure.html
+
+https://qiita.com/tockn/items/2ce68b99e0839df52200 <- 昨年度の Treasure 生の記事
+
+---
+
+## 仮想 DOM の UI framework での注意点
+
+**自分で DOM を組み立ててはいけない**
+
+```javascript
+$("a#mylink").append(`<p>${mylinkTitle}</p>`);
+```
+
+- 仮想 DOM の図と説明を思い出してみよう
+
+---
+
+<TitlePage>
+
+# 演習
+
+</TitlePage>
+
+---
+
+以降は好きなUI フレームワークを使ってやってみましょう
+
+APIサーバは認証があるので
+
+https://github.com/voyagegroup/treasure-app/tree/master/frontend
+
+を参考にすると良いでしょう
+
+もちろん上記のものを拡張しても構いません
+
+---
+
+## 頑張ってやってみよう
+
+1. 昨日作った API を使って記事を XX してみよう
+
+- 新規追加
+- 読み込み
+- 更新
+- 削除
+
+2. 音声認識でテキストボックスに入力しよう（コメント欄とか）
+3. コメント追加
+
+---
+
+## え、足りない？
+
+4. Routing をやってみよう
+
+- React は React Router
+- Vue.js は VueRouter
+- それぞれ hash パラメータを使う Routing なら nginx とか使わなくても出来るよ
+
+5. Snapshot test やってみる？
+
+- Jest とかがよく使われるかな
+
+---
+
+<TitlePage>
+
+# その他 Tips
+
+</TitlePage>
+
+---
+
+- Debug
+  - Chrome Deverloper Tools を使うといいぞ
+- Lint
+  - こだわりがないのであれば Prettier
+- jsconfig.json
+  - https://code.visualstudio.com/docs/languages/javascript
+- @types は JS でも有効
+  - TypeScript じゃなくてもエディタが対応していれば型定義を表示してくれる
+- CSS framework
+  - React なら Material-UI、Vue なら Vuetify みたいなのがある
+- TypeScript
+  - いいぞ

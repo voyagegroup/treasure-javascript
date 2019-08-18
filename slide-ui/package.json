@@ -1,0 +1,14 @@
+{
+  "name": "slide",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@mdx-deck/themes": "3.0.8",
+    "mdx-deck": "3.0.9"
+  },
+  "scripts": {
+    "start": "mdx-deck slide.mdx",
+    "build": "mdx-deck build slide.mdx"
+  }
+}
