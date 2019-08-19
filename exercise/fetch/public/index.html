@@ -19,75 +19,69 @@
 	const errorHandler = function(error) {
 		document.getElementById("error").textContent = `${error.name}: ${error.message}`;
 	}
-
+	
 	class RetryError extends Error{}
 
-	const statusCodeHandler = (res) => {
-		if (res.ok) return res;
-		if (res.status === 503) {
-			throw new RetryError();
-		}
-		throw new Error(`${res.statusText}: ${res.status}`);
+	const handleErrors = (res) => {
+
+		console.log(res.status);
+
+        if (res.ok) {
+            return res;
+        }
+
+        switch (res.status) {
+            case 400: throw Error('INVALID_TOKEN');
+            case 401: throw Error('UNAUTHORIZED');
+            case 500: throw Error('INTERNAL_SERVER_ERROR');
+			case 502: throw Error('BAD_GATEWAY');
+			case 503: throw new RetryError('RETRY');
+			case 504: throw Error('TIMEOUT');
+            case 404: throw Error('NOT_FOUND');
+            default:  throw Error('UNHANDLED_ERROR');
+        } 
 	}
 
-	// fetch(url, options)
-	// 		.then(statusCodeHandler)
-	// 		.then(toText)
-	// 		.then((e) => parseJson(url, method, e))
+	const toText = (res) => { res.text()}
 
-	const toText = (res) => res.text()
-
-	const parseJson = (res) => {
+	const parseJson = (text) => {
 		try {
-			return JSON.parse(res);
-		} catch {
-			throw new Error("Failed to parse JSON");
+			return JSON.parse(text);
+		} catch (e) {
+			throw e;
 		}
 	}
-
-	const timeout = ms => new Promise((resolve, reject) => {
-		return setTimeout(function() {
-			reject(new Error(`Timeout after ${ms} ms`))
-		}, ms);
-	})
-
-	const requestWithTimeout = ms => {
-		return function(method, url, body = {}) {
-			const req = request(method, url, body);
-			return Promise.race([timeout(ms), req]);
-		}
-	}
-
+	
 	// change this
-	const request = function(method, url, body = {}) {
-
-		let options = {
-			method: method,
-		}
-
-		if (method !== "GET") {
-			options = Object.assign(options, {
-				body: JSON.stringify(body),
-				"Content-Type": "application/json"
+	const request = function(method, url) {
+		return fetch(url, {
+				method: method,
 			})
-		}
-		
-		return fetch(url, options)
-			.then(statusCodeHandler)
-			.then(toText)
-			.then(parseJson)
-			.catch(e => {
+			.then(handleErrors)
+		  	.then(res => { return res.json(); })
+			.catch((e) => { 
+				console.log(e);
 				if (e instanceof RetryError) {
-					return request(method, url, body)
+					return request(method, url);
 				}
-				throw e;
-			})
+				throw Error('RESPONSE_NOT_JSON') 
+			});
+	}
+	
+	const timeoutPromis = (t) => {
+		return new Promise(function(resolve, reject) {
+			setTimeout(reject, t, new Error('TIMEOUT'));
+		} );
+	}
+
+	function requestWithTimeout(t) {
+		return function(method, url) {
+			return Promise.race([timeoutPromis(t), request(method, url)])
+		}
 	}
 
 	// #1 GET 2xx
-	// request("GET", "http://localhost:3001/posts", {})
-	// 	.then(successHandler)
-	// 	.catch(errorHandler)
+	// request("GET", "http://localhost:3001/posts").then(successHandler).catch(errorHandler)
 
 	// #2 GET 4xx
 	// request("GET", "http://localhost:3001/404").then(successHandler).catch(errorHandler)
@@ -99,24 +93,15 @@
 	// request("GET", "http://localhost:3001/index.html").then(successHandler).catch(errorHandler)
 
 	// #5 PUT
-	// request("PUT", "http://localhost:3001/posts/1", {"id": 2, "title": "treasure", "author": "saxsir1"}).then(successHandler).catch(errorHandler)
+	// request("PUT", "http://localhost:3001/posts/1", {"id": 1, "title": "treasure", "author": "{{CHANGE YOUR NAME}}" }).then(successHandler).catch(errorHandler)
 
 	// #6 GET /timeout with Timeout
 	// requestWithTimeout(2000)("GET", "http://localhost:3001/timeout").then(successHandler).catch(errorHandler)
 
 	// #7 GET /retryme until success
-	// requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
+	requestWithTimeout(2000)("GET", "http://localhost:3001/retryme").then(successHandler).catch(errorHandler)
 
 	// #8 [GET http://localhost:3001/posts/1, GET http://localhost:3001/comments?post_id=1]
-	// const req1 = request("GET", "http://localhost:3001/posts/1");
-	// const req2 = request("GET", "http://localhost:3001/comments?post_id=1");
-
-	// Promise.all([req1, req2]).then(responses => {
-	// 	return Object.assign({}, {
-	// 		posts: responses[0],
-	// 		comments: responses[1]
-	// 	})
-	// }).then(successHandler).catch(errorHandler)
 
 	</script>
 </body>
